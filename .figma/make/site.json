@@ -1,0 +1,10 @@
+{
+  "description": "Create a cohesive brand kit and reusable design system for events, enabling easy customization of templates for announcements and community engagement.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
