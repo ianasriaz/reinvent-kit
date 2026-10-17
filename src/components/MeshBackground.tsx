@@ -1,20 +1,11 @@
 import React from "react"
+import { BRAND_GRADIENTS, type MeshVariant } from "../data/brand"
 
 interface MeshBackgroundProps {
   children?: React.ReactNode
-  variant?: "main" | "speaker" | "sponsor" | "partner"
+  variant?: MeshVariant
   className?: string
   style?: React.CSSProperties
-}
-
-const GRADIENTS = {
-  main: "linear-gradient(135deg, #4A3EE0 0%, #7C3AED 26%, #C239BD 52%, #15A8E0 80%, #06C8DC 100%)",
-  speaker:
-    "linear-gradient(135deg, #4338CA 0%, #7E22CE 28%, #BC35B8 52%, #119CD6 80%, #08BDD4 100%)",
-  sponsor:
-    "linear-gradient(135deg, #4838CC 0%, #8930D0 27%, #C03CB2 52%, #14A4DA 80%, #0AC0D4 100%)",
-  partner:
-    "linear-gradient(135deg, #3E30BE 0%, #7628CE 28%, #BA38B5 52%, #1098D0 80%, #06B8D0 100%)",
 }
 
 export default function MeshBackground({
@@ -23,7 +14,7 @@ export default function MeshBackground({
   className = "",
   style = {},
 }: MeshBackgroundProps) {
-  const baseGrad = GRADIENTS[variant] || GRADIENTS.main
+  const baseGrad = BRAND_GRADIENTS[variant]
 
   return (
     <div

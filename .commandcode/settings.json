@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Shell(rm:*)",
+      "Shell(cd src/assets && ls | grep -v -E '^(aws-logo-clean|islamabad-skyline)\\.png$' | xargs rm && rm ../data/speakers.ts && ls ../assets ../data)",
+      "Shell(pnpm:*)",
+      "Shell(ss:*)",
+      "Shell(pkill:*)",
+      "Shell(sleep:*)",
+      "Shell(kill:*)",
+      "Shell(grep:*)",
+      "Shell(curl -s -o /dev/null -w %{http_code}\\n http://localhost:8443/ 2 >& 1)",
+      "Shell(gh cs ports --codespace $(gh cs list --limit 1 -c ^fantastic-robot-x5gg9vxrgvxc9p99 --json name -q '.[0].name' 2>/dev/null || gh cs list --limit 5 --json name -q '.[].name' 2>/dev/null | head -1) 2>&1 | head; echo ---; gh auth status 2>&1 | head -5)",
+      "Shell(gh:*)",
+      "Shell(gh cs ports --codespace fantastic-robot-x5gg9vxrgvxc9p99 2>&1; curl -s -o /dev/null -w \"%{http_code}\\n\" https://fantastic-robot-x5gg9vxrgvxc9p99-8443.app.github.dev/)"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}

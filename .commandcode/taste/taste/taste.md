@@ -1,0 +1,8 @@
+# Taste
+- Wants a plan-first workflow: review all relevant files first, then share a plan with suggested options — never dump code up front. Implement only after explicit approval. Confidence: 0.95
+- Prefers to be interviewed/asked questions when requirements are ambiguous, rather than having the agent assume. Confidence: 0.85
+- Values process efficiency: goal is reducing manual work via streamlined, reusable systems (e.g., a brand kit with quick-change config rather than one-off edits). Favor config-driven, easily-updatable solutions over hardcoded values. Confidence: 0.8
+- Prefers minimal permission friction — explored `--yolo` (permission bypass) mode to avoid approving each terminal command individually; OK with auto-approved tooling in trusted environments. Confidence: 0.6
+- When preview/dev-server issues arise, prefers to take over: have the agent kill background processes and hand over copy-pasteable run commands (pnpm dev/build/preview with port flags) to run in their own terminal. Confidence: 0.6
+- During debugging/troubleshooting, wants direct fixes with minimal explanation — explicitly said "just fix it, I don't need your explanation" and reacted strongly to advisory response (suggestions for user-side steps). Prefer acting (run the checks/fixes with tools, verify the result) over giving instructions or option lists. Keep responses to a terse confirmation once fixed. Confidence: 0.85
+  - Bug reports arrive as bare one-liners (symptom + file path, e.g. "src/assets Images are not rendering, fix"), so locate the root cause autonomously with tools instead of asking which files/how it breaks. Confidence: 0.75
