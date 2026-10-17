@@ -1,4 +1,4 @@
-import skylineUrl from "../assets/islamabad-skyline.png"
+import skylineUrl from "../assets/Islamabad Landmark Footer.png"
 
 interface IslamabadHorizonProps {
   opacity?: number
@@ -8,7 +8,7 @@ interface IslamabadHorizonProps {
 }
 
 export default function IslamabadHorizon({
-  opacity = 0.5,
+  opacity = 0.65,
   height,
   objectFit = "cover",
   className = "",
@@ -25,7 +25,7 @@ export default function IslamabadHorizon({
     >
       <img
         src={skylineUrl}
-        alt="Islamabad Skyline"
+        alt="Islamabad Landmark Footer"
         crossOrigin="anonymous"
         className="w-full h-auto block"
         style={{
@@ -33,7 +33,7 @@ export default function IslamabadHorizon({
           height: height ? "100%" : "auto",
           objectFit,
           objectPosition: "bottom",
-          mixBlendMode: "screen",
+          display: "block",
         }}
       />
     </div>
