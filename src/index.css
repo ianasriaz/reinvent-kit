@@ -11,8 +11,8 @@ body {
 }
 
 :root {
-  --grad-main: linear-gradient(135deg, #5046E4 0%, #8B34CC 28%, #C84BC0 50%, #2AAEE0 78%, #10C4D4 100%);
-  --grad-speaker: linear-gradient(135deg, #3B3DB8 0%, #7B34D4 35%, #B040B8 58%, #1AA0D8 85%, #06B6D4 100%);
-  --grad-sponsor: linear-gradient(135deg, #4838CC 0%, #9034C8 30%, #C040B0 55%, #18AAD8 82%, #0CC8D4 100%);
-  --grad-partner: linear-gradient(135deg, #3C2FB4 0%, #8030CC 32%, #BC3CB8 55%, #1298D0 82%, #08BDD0 100%);
+  --grad-main:    linear-gradient(135deg, #8B5CF6 0%, #A855C8 22%, #D45EA8 48%, #22C8E8 78%, #06D6D0 100%);
+  --grad-speaker: linear-gradient(135deg, #7C54EC 0%, #9E48C0 24%, #CE5AA4 50%, #18C4E4 78%, #08CCC8 100%);
+  --grad-sponsor: linear-gradient(135deg, #8258F0 0%, #A84ECA 24%, #D058A8 50%, #20C6E6 78%, #0ACECE 100%);
+  --grad-partner: linear-gradient(135deg, #7A50E8 0%, #A44CC4 24%, #CC58A8 50%, #14C2E2 78%, #06CACA 100%);
 }

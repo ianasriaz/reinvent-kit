@@ -7,14 +7,13 @@ interface MeshBackgroundProps {
   style?: React.CSSProperties
 }
 
+// Clean smooth gradients matching the reference — pure linear, no radial blobs
+// Purple-lavender (left) → soft rose-pink (center) → bright cyan-teal (right)
 const GRADIENTS = {
-  main: "linear-gradient(135deg, #4A3EE0 0%, #7C3AED 26%, #C239BD 52%, #15A8E0 80%, #06C8DC 100%)",
-  speaker:
-    "linear-gradient(135deg, #4338CA 0%, #7E22CE 28%, #BC35B8 52%, #119CD6 80%, #08BDD4 100%)",
-  sponsor:
-    "linear-gradient(135deg, #4838CC 0%, #8930D0 27%, #C03CB2 52%, #14A4DA 80%, #0AC0D4 100%)",
-  partner:
-    "linear-gradient(135deg, #3E30BE 0%, #7628CE 28%, #BA38B5 52%, #1098D0 80%, #06B8D0 100%)",
+  main:    "linear-gradient(125deg, #9272F0 0%, #B468D4 28%, #D470B0 52%, #38C8E8 78%, #18D4D0 100%)",
+  speaker: "linear-gradient(125deg, #8868E8 0%, #AA64CC 28%, #CC6CAC 52%, #30C4E4 78%, #10D0CC 100%)",
+  sponsor: "linear-gradient(125deg, #9070EC 0%, #B264D0 28%, #D068A8 52%, #34C6E6 78%, #14D2CE 100%)",
+  partner: "linear-gradient(125deg, #8A6AEA 0%, #AC66CE 28%, #CE6AAA 52%, #2EC2E4 78%, #12CECC 100%)",
 }
 
 export default function MeshBackground({
@@ -33,61 +32,16 @@ export default function MeshBackground({
         ...style,
       }}
     >
-      {/* Enhanced Layer 1: Vivid Magenta/Fuchsia Light Bloom (Center-Top) */}
-      <div
-        className="pointer-events-none absolute"
-        style={{
-          top: "-10%",
-          right: "15%",
-          width: "70%",
-          height: "70%",
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(236, 72, 153, 0.38) 0%, rgba(192, 38, 211, 0.18) 45%, transparent 70%)",
-          filter: "blur(45px)",
-        }}
-      />
-
-      {/* Enhanced Layer 2: Radiant Electric Cyan Bloom (Lower-Right) */}
-      <div
-        className="pointer-events-none absolute"
-        style={{
-          bottom: "-15%",
-          right: "-8%",
-          width: "65%",
-          height: "65%",
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(0, 240, 255, 0.42) 0%, rgba(14, 165, 233, 0.2) 45%, transparent 70%)",
-          filter: "blur(48px)",
-        }}
-      />
-
-      {/* Enhanced Layer 3: Brilliant Indigo Light Bloom (Upper-Left) */}
-      <div
-        className="pointer-events-none absolute"
-        style={{
-          top: "-15%",
-          left: "-10%",
-          width: "60%",
-          height: "60%",
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(99, 102, 241, 0.45) 0%, transparent 65%)",
-          filter: "blur(50px)",
-        }}
-      />
-
-      {/* Enhanced Layer 4: Subtle Luminous Angled Shimmer */}
+      {/* Single very subtle white diagonal shimmer — keeps it from looking completely flat */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "linear-gradient(130deg, rgba(255, 255, 255, 0.14) 0%, transparent 40%, rgba(255, 255, 255, 0.08) 100%)",
+            "linear-gradient(125deg, rgba(255,255,255,0.07) 0%, transparent 50%, rgba(255,255,255,0.04) 100%)",
         }}
       />
 
-      {/* Card Content with Crisp White Elements */}
+      {/* Card Content */}
       <div className="relative w-full h-full z-10 flex flex-col justify-between">
         {children}
       </div>

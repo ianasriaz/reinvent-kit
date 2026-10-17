@@ -68,6 +68,7 @@ export default function AwsReinventLogo({
         >
           <span
             style={{
+              fontFamily: "'Space Mono', monospace",
               fontSize: s.awsSize,
               fontWeight: 700,
               letterSpacing: "0.02em",
@@ -79,6 +80,7 @@ export default function AwsReinventLogo({
           </span>
           <span
             style={{
+              fontFamily: "'Space Mono', monospace",
               fontSize: s.reSize,
               fontWeight: 700,
               letterSpacing: "-0.01em",
@@ -94,6 +96,7 @@ export default function AwsReinventLogo({
         {/* Hero Keyword: Invent */}
         <span
           style={{
+            fontFamily: "'Space Mono', monospace",
             fontSize: s.inventSize,
             fontWeight: 700,
             letterSpacing: "-0.03em",

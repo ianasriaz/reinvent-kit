@@ -1,4 +1,4 @@
-import awsLogoUrl from "../assets/aws-logo-clean.png"
+import awsLogoUrl from "../assets/aws logo white.png"
 
 interface AwsLogoProps {
   size?: number
@@ -22,7 +22,6 @@ export default function AwsLogo({
         width: `${size}px`,
         height: "auto",
         maxHeight: `${size}px`,
-        filter: "brightness(0) invert(1)",
         ...style,
       }}
     />
