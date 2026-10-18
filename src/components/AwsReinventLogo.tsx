@@ -3,6 +3,7 @@ import React from "react"
 interface AwsReinventLogoProps {
   size?: "sm" | "md" | "lg" | "hero"
   subline?: string
+  sublineStyle?: React.CSSProperties
   className?: string
   style?: React.CSSProperties
 }
@@ -10,6 +11,7 @@ interface AwsReinventLogoProps {
 export default function AwsReinventLogo({
   size = "md",
   subline,
+  sublineStyle = {},
   className = "",
   style = {},
 }: AwsReinventLogoProps) {
@@ -118,6 +120,7 @@ export default function AwsReinventLogo({
             letterSpacing: "0.02em",
             color: "rgba(255, 255, 255, 0.88)",
             textTransform: "uppercase",
+            ...sublineStyle,
             marginTop: "clamp(3px, 0.4cqi, 5px)",
             lineHeight: 1,
           }}

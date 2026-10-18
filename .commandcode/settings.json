@@ -66,7 +66,8 @@
       "Shell(curl -sS http://localhost:5003/)",
       "Shell(cd /workspaces/reinvent-kit && sleep 4; tail -6 /tmp/commandcode/shellout/2026-10-17T20-33-06-977Z-s5ao1nhv.log; echo \"=== preamble count (expect 2) ===\"; curl -sS http://localhost:8443/ | grep -c \"injectIntoGlobalHook\"; echo \"=== NODE_ENV in process ===\"; PID=$(ss -ltnp 2>/dev/null | grep 8443 | grep -o 'pid=[0-9]*' | cut -d= -f2 | head -1); tr '\\0' '\\n' < /proc/$PID/environ | grep NODE_ENV)",
       "Shell(cd /workspaces/reinvent-kit && echo \"=== port list ===\"; gh cs ports --codespace fantastic-robot-x5gg9vxrgvxc9p99 2>&1; echo \"=== public URL ===\"; curl -sS -o /dev/null -w \"public http=%{http_code}\\n\" https://fantastic-robot-x5gg9vxrgvxc9p99-8443.app.github.dev/)",
-      "Shell(cd /workspaces/reinvent-kit && gh cs ports visibility 8443:public --codespace fantastic-robot-x5gg9vxrgvxc9p99 2>&1; gh cs ports --codespace fantastic-robot-x5gg9vxrgvxc9p99 2>&1 | grep 8443; echo \"=== public URL after ===\"; curl -sS -o /dev/null -w \"public http=%{http_code}\\n\" https://fantastic-robot-x5gg9vxrgvxc9p99-8443.app.github.dev/)"
+      "Shell(cd /workspaces/reinvent-kit && gh cs ports visibility 8443:public --codespace fantastic-robot-x5gg9vxrgvxc9p99 2>&1; gh cs ports --codespace fantastic-robot-x5gg9vxrgvxc9p99 2>&1 | grep 8443; echo \"=== public URL after ===\"; curl -sS -o /dev/null -w \"public http=%{http_code}\\n\" https://fantastic-robot-x5gg9vxrgvxc9p99-8443.app.github.dev/)",
+      "Shell(npx tsc --noEmit -p tsconfig.json 2 >& 1)"
     ],
     "deny": [],
     "defaultMode": "default"

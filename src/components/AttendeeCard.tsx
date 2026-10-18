@@ -68,10 +68,10 @@ export default function AttendeeCard({
           {/* Content row */}
           <div
             className="relative z-10 flex items-start justify-between w-full"
-            style={{ padding: "clamp(16px, 3.2cqi, 40px)" }}
+            style={{ padding: "clamp(18px, 4cqi, 50px)", paddingTop: "clamp(20px, 4.6cqi, 56px)" }}
           >
-            <AwsReinventLogo size="sm" subline="WATCH & BUILD PARTY 2026" />
-            <AwsLogo size={54} />
+            <AwsReinventLogo size="md" subline="WATCH & BUILD PARTY 2026" />
+            <AwsLogo size={68} />
           </div>
         </MeshBackground>
       </div>
@@ -113,9 +113,9 @@ export default function AttendeeCard({
           <div
             style={{
               width: "88%",
-              borderTop: "2.5px solid rgba(6, 4, 12, 0.5)",
-              borderBottom: "2.5px solid rgba(6, 4, 12, 0.5)",
-              padding: "clamp(10px, 1.8cqi, 20px) 0",
+              borderTop: "2.5px solid rgba(107, 111, 118, 0.5)",
+              borderBottom: "2.5px solid rgba(107, 111, 118, 0.5)",
+              padding: "clamp(14px, 2.6cqi, 28px) 0",
             }}
           >
             <h1
@@ -143,12 +143,13 @@ export default function AttendeeCard({
             <div
               style={{
                 fontFamily: "var(--font-mono)",
-                fontSize: "clamp(20px, 4.2cqi, 52px)",
+                fontSize: "clamp(17px, 3.6cqi, 36px)",
                 fontWeight: 700,
-                letterSpacing: "0.02em",
+                letterSpacing: "0.04em",
                 color: "#06040C",
                 lineHeight: 1,
                 textAlign: "left",
+                flexShrink: 0,
               }}
             >
               #{attendee.number}

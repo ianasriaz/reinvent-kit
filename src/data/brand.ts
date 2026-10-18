@@ -1,5 +1,5 @@
 export const BRAND_GRADIENT =
-  "linear-gradient(135deg, #7B57FE 0%, #3B76F8 22%, #9C5FF5 52%, #A873F8 70%, #35A6E0 86%, #0FA8D8 100%)"
+  "linear-gradient(135deg, #6B45E8 0%, #2E63E0 22%, #8749DC 52%, #9462E0 70%, #1F8CC8 86%, #0A8DC0 100%)"
 
 export const ACCENT = "#00DFD8"
 
@@ -40,6 +40,26 @@ export const GRADIENT_PRESETS: GradientPreset[] = [
     id: "full-spectrum",
     name: "Full Spectrum",
     css: "linear-gradient(140deg, #ad5dfe 0%, #ff57ea 34%, #fe9900 66%, #00e482 100%)",
+  },
+  {
+    id: "twilight-mesh",
+    name: "Twilight Mesh",
+    css: "linear-gradient(155deg, #171038 0%, #33277E 26%, #5F3EC2 48%, #4A6CC8 70%, #38AEC8 88%, #6FD9DC 100%)",
+  },
+  {
+    id: "graphite-orchid",
+    name: "Graphite Orchid",
+    css: "linear-gradient(155deg, #1B1D28 0%, #312C44 24%, #4E4470 46%, #6E5F94 66%, #8A7FB4 84%, #A8A2C8 100%)",
+  },
+  {
+    id: "ink-and-teal",
+    name: "Ink & Teal",
+    css: "linear-gradient(155deg, #10151C 0%, #1E2B3C 22%, #2C4A62 44%, #38748C 66%, #4FA8B4 84%, #7CCFD0 100%)",
+  },
+  {
+    id: "dusk-jewel",
+    name: "Dusk Jewel",
+    css: "linear-gradient(155deg, #1E1636 0%, #3A2A70 24%, #6E44B8 46%, #8E5AC8 64%, #4E9EC8 82%, #8FE0D8 100%)",
   },
 ]
 

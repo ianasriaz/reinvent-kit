@@ -25,6 +25,7 @@ import MainEventCard from "./components/MainEventCard"
 import SpeakerCard from "./components/SpeakerCard"
 import PartnerCard from "./components/shared/PartnerCard"
 import AttendeeCard, { type Attendee } from "./components/AttendeeCard"
+import PhotoWall from "./components/PhotoWall"
 import TextField, { ChoiceGroup } from "./components/ui/TextField"
 
 const TABS = [
@@ -50,8 +51,14 @@ const TABS = [
   },
   {
     id: "Attendees",
-    size: "1000 × 1400",
-    description: "Vertical attendee badge with card number & QR check-in",
+    size: "1063 × 1488",
+    description:
+      "Vertical attendee badge · 90 × 126 mm · 4-up printable on A4 @ 300 DPI",
+  },
+  {
+    id: "Photo Wall",
+    size: "1920 × 1080",
+    description: "Photo-op backdrop · visitors stand front & center, corners do the branding",
   },
 ] as const
 
@@ -62,23 +69,24 @@ const TAB_WIDTH: Record<Tab, number> = {
   Speaker: 1080,
   Sponsor: 1080,
   "Community Partner": 1080,
-  Attendees: 1000,
+  Attendees: 1063,
+  "Photo Wall": 1920,
 }
 
 const FILE_PREFIX = "aws-reinvent-islamabad"
 
 // Fake roster for the Attendees tab design preview (never real data)
 const SAMPLE_ATTENDEES: Attendee[] = [
-  { name: "Sumama Zaeem", organization: "AIR University Islamabad", tier: "ATTENDEE", number: "WB-26-0001" },
-  { name: "Maria Bibi", organization: "Quaid-i-Azam University", tier: "ATTENDEE", number: "WB-26-0002" },
-  { name: "Muhammad Abdullah Bin Tariq", organization: "COMSATS University Islamabad", tier: "SPEAKER", number: "WB-26-0003" },
-  { name: "Fatima Tahir", organization: "NUST School of Electrical Engineering & Computer Sciences", tier: "ATTENDEE", number: "WB-26-0004" },
-  { name: "Ali Raza", organization: "Hamdard University", tier: "ATTENDEE", number: "WB-26-0005" },
-  { name: "Hassan Muhammad Kamran", organization: "Bahria University Karachi Campus", tier: "SUPPORTER", number: "WB-26-0006" },
-  { name: "Ayesha Siddiqui", organization: "University of the Punjab", tier: "ATTENDEE", number: "WB-26-0007" },
-  { name: "Usman Ghani", organization: "Arlinux Technologies", tier: "ATTENDEE", number: "WB-26-0008" },
-  { name: "Zainab Khalid", organization: "The Millenium Universal College", tier: "ATTENDEE", number: "WB-26-0009" },
-  { name: "Muhammad Bilal Ahmed", organization: "Ghulam Ishaq Khan Institute", tier: "SPEAKER", number: "WB-26-0010" },
+  { name: "Sumama Zaeem", organization: "AIR University Islamabad", tier: "ATTENDEE", number: "REINVENT-0001" },
+  { name: "Maria Bibi", organization: "Quaid-i-Azam University", tier: "ATTENDEE", number: "REINVENT-0002" },
+  { name: "Muhammad Abdullah Bin Tariq", organization: "COMSATS University Islamabad", tier: "SPEAKER", number: "REINVENT-0003" },
+  { name: "Fatima Tahir", organization: "NUST School of Electrical Engineering & Computer Sciences", tier: "ATTENDEE", number: "REINVENT-0004" },
+  { name: "Ali Raza", organization: "Hamdard University", tier: "ATTENDEE", number: "REINVENT-0005" },
+  { name: "Hassan Muhammad Kamran", organization: "Bahria University Karachi Campus", tier: "SUPPORTER", number: "REINVENT-0006" },
+  { name: "Ayesha Siddiqui", organization: "University of the Punjab", tier: "ATTENDEE", number: "REINVENT-0007" },
+  { name: "Usman Ghani", organization: "Arlinux Technologies", tier: "ATTENDEE", number: "REINVENT-0008" },
+  { name: "Zainab Khalid", organization: "The Millenium Universal College", tier: "ATTENDEE", number: "REINVENT-0009" },
+  { name: "Muhammad Bilal Ahmed", organization: "Ghulam Ishaq Khan Institute", tier: "SPEAKER", number: "REINVENT-0010" },
 ]
 
 interface BatchItem {
@@ -115,6 +123,12 @@ function cardFor(tab: Tab, config: EventConfig, onPhoto: (file: File) => void) {
       return <PartnerCard mode="partner" partner={config.partner} />
     case "Attendees":
       return <AttendeeCard attendee={SAMPLE_ATTENDEES[0]} />
+    case "Photo Wall":
+      return (
+        <PhotoWall
+          edition={config.edition}
+        />
+      )
   }
 }
 
@@ -593,7 +607,7 @@ export default function App() {
               <span>
                 {isExporting
                   ? "Rendering..."
-                  : `Download PNG (${isSquare ? "1080×1080" : "1200×630"})`}
+                  : `Download PNG (${current.size})`}
               </span>
             </button>
 

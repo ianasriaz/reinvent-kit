@@ -60,7 +60,11 @@ export default function MainEventCard({
             }}
           >
             {/* Signature AWS re:Invent Lockup — same treatment as the card headers */}
-            <AwsReinventLogo size="hero" subline={`WATCH & BUILD PARTY ${edition}`} />
+            <AwsReinventLogo
+              size="hero"
+              subline={`WATCH & BUILD PARTY ${edition}`}
+              sublineStyle={{ fontWeight: 500 }}
+            />
 
             {/* Date / Venue Pill */}
             <div
@@ -80,6 +84,62 @@ export default function MainEventCard({
                 venue={venue}
                 className="w-full justify-center"
               />
+            </div>
+
+            {/* Highlights row — centered under the pill, inset from pill edges */}
+            <div
+              className="flex w-full items-center justify-center"
+              style={{ gap: "clamp(22px, 3.4cqi, 40px)" }}
+            >
+              {["NETWORKING", "REFRESHMENT", "SWAGS"].map((label) => (
+                <div
+                  key={label}
+                  className="flex items-center"
+                  style={{
+                    gap: "clamp(4px, 0.7cqi, 8px)",
+                  }}
+                >
+                  <span
+                    className="flex items-center justify-center"
+                    style={{
+                      width: "clamp(10px, 1.5cqi, 15px)",
+                      height: "clamp(10px, 1.5cqi, 15px)",
+                      borderRadius: "9999px",
+                      background: "rgba(255, 255, 255, 0.55)",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#06040C"
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{
+                        width: "60%",
+                        height: "60%",
+                      }}
+                    >
+                      <path d="M5 13l4 4L19 7" />
+                    </svg>
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "clamp(8px, 1.15cqi, 13px)",
+                      fontWeight: 700,
+                      letterSpacing: "0.14em",
+                      color: "rgba(255, 255, 255, 0.92)",
+                      textTransform: "uppercase",
+                      lineHeight: 1,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {label}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
 
