@@ -15,7 +15,7 @@ export default function EventMeta({
 }: EventMetaProps) {
   const iconSize = size === "lg" ? 15 : 13
   const fontSize =
-    size === "lg" ? "clamp(10px, 1.35cqi, 14px)" : "clamp(9px, 1.35cqi, 12px)"
+    size === "lg" ? "clamp(11px, 1.45cqi, 14px)" : "clamp(9px, 1.35cqi, 12px)"
   const gap = size === "lg" ? "8px" : "6px"
   return (
     <div
@@ -23,7 +23,7 @@ export default function EventMeta({
       style={{
         columnGap: "12px",
         rowGap: "6px",
-        fontFamily: "'Space Mono', monospace",
+        fontFamily: "var(--font-mono)",
         fontSize,
         fontWeight: 700,
         color: "#FFFFFF",

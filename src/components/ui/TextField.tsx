@@ -3,7 +3,7 @@ import { ACCENT } from "../../data/brand"
 
 const labelStyle: React.CSSProperties = {
   display: "block",
-  fontFamily: "'Space Mono', monospace",
+  fontFamily: "var(--font-mono)",
   fontSize: "10px",
   color: "rgba(255, 255, 255, 0.45)",
   marginBottom: "6px",
@@ -94,7 +94,7 @@ export function ChoiceGroup<T extends string>({
                     ? ACCENT
                     : "#FFFFFF"
                   : "rgba(255, 255, 255, 0.7)",
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "var(--font-mono)",
                 fontSize: "11px",
                 cursor: "pointer",
                 transition: "all 0.15s ease",

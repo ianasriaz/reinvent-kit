@@ -19,7 +19,7 @@ export default function CommunityPartnerCard({
 }: CommunityPartnerCardProps) {
   return (
     <div className="@container relative w-full aspect-square overflow-hidden select-none rounded-lg shadow-2xl">
-      <MeshBackground variant="partner">
+      <MeshBackground>
         {/* Full Edge-to-Edge Panoramic Islamabad Skyline at 50% opacity */}
         <IslamabadHorizon opacity={0.5} />
 
@@ -31,11 +31,11 @@ export default function CommunityPartnerCard({
             boxSizing: "border-box",
           }}
         >
-          {/* Header Row: AWS Logo on Left, Aligned AWS re:Invent on Right */}
+          {/* Header Row: Aligned AWS re:Invent on Left, AWS Logo on Right */}
           <div className="flex items-start justify-between w-full">
-            <AwsLogo size={42} />
-
             <AwsReinventLogo size="sm" subline="WATCH & BUILD PARTY 2026" />
+
+            <AwsLogo size={54} />
           </div>
 
           {/* Centerpiece — Partner Logo + Name + Category */}
@@ -43,7 +43,7 @@ export default function CommunityPartnerCard({
             {/* Category Label */}
             <p
               style={{
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "var(--font-mono)",
                 fontSize: "clamp(11px, 2cqi, 14px)",
                 fontWeight: 700,
                 color: "rgba(255, 255, 255, 0.9)",
@@ -80,7 +80,7 @@ export default function CommunityPartnerCard({
               ) : (
                 <span
                   style={{
-                    fontFamily: "'Space Mono', monospace",
+                    fontFamily: "var(--font-mono)",
                     fontSize: "clamp(12px, 2.4cqi, 16px)",
                     fontWeight: 700,
                     color: "#0F172A",
@@ -95,7 +95,7 @@ export default function CommunityPartnerCard({
             {/* Partner Name in Space Mono */}
             <h1
               style={{
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "var(--font-mono)",
                 fontSize: "clamp(22px, 4.4cqi, 38px)",
                 fontWeight: 700,
                 color: "#FFFFFF",
@@ -117,7 +117,7 @@ export default function CommunityPartnerCard({
             >
               <span
                 style={{
-                  fontFamily: "'Instrument Sans', sans-serif",
+                  fontFamily: "var(--font-brand)",
                   fontSize: "clamp(11px, 2cqi, 14px)",
                   fontWeight: 500,
                   color: "#FFFFFF",

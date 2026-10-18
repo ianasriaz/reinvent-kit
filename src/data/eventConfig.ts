@@ -69,7 +69,7 @@ export const SPEAKER_PRESETS: SpeakerData[] = [
 ]
 
 export const defaultEventConfig: EventConfig = {
-  venue: "AIR UNIVERSITY, MAIN CAMPUS",
+  venue: "AIR UNIVERSITY",
   city: "Islamabad",
   dateRange: "DEC, 2026",
   edition: "2026",
@@ -78,7 +78,7 @@ export const defaultEventConfig: EventConfig = {
   partner: { name: "MLSA Pakistan", type: "Student Community" },
 }
 
-const STORAGE_KEY = "reinvent-kit-config-v1"
+const STORAGE_KEY = "reinvent-kit-config-v2"
 
 export function loadEventConfig(): EventConfig {
   try {

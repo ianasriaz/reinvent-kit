@@ -8,7 +8,14 @@ import {
   clearEventConfig,
   SPEAKER_PRESETS,
 } from "./data/eventConfig"
-import { ACCENT } from "./data/brand"
+import {
+  ACCENT,
+  BRAND_GRADIENT,
+  GRADIENT_PRESETS,
+  GRADIENT_STORAGE_KEY,
+  DEFAULT_GRADIENT_ID,
+} from "./data/brand"
+import { GradientContext } from "./gradientContext"
 import {
   exportElementAsPng,
   copyElementToClipboard,
@@ -17,6 +24,7 @@ import {
 import MainEventCard from "./components/MainEventCard"
 import SpeakerCard from "./components/SpeakerCard"
 import PartnerCard from "./components/shared/PartnerCard"
+import AttendeeCard, { type Attendee } from "./components/AttendeeCard"
 import TextField, { ChoiceGroup } from "./components/ui/TextField"
 
 const TABS = [
@@ -40,6 +48,11 @@ const TABS = [
     size: "1080 × 1080",
     description: "Square card featuring student & developer alliances",
   },
+  {
+    id: "Attendees",
+    size: "1000 × 1400",
+    description: "Vertical attendee badge with card number & QR check-in",
+  },
 ] as const
 
 type Tab = typeof TABS[number]["id"]
@@ -49,9 +62,24 @@ const TAB_WIDTH: Record<Tab, number> = {
   Speaker: 1080,
   Sponsor: 1080,
   "Community Partner": 1080,
+  Attendees: 1000,
 }
 
 const FILE_PREFIX = "aws-reinvent-islamabad"
+
+// Fake roster for the Attendees tab design preview (never real data)
+const SAMPLE_ATTENDEES: Attendee[] = [
+  { name: "Sumama Zaeem", organization: "AIR University Islamabad", tier: "ATTENDEE", number: "WB-26-0001" },
+  { name: "Maria Bibi", organization: "Quaid-i-Azam University", tier: "ATTENDEE", number: "WB-26-0002" },
+  { name: "Muhammad Abdullah Bin Tariq", organization: "COMSATS University Islamabad", tier: "SPEAKER", number: "WB-26-0003" },
+  { name: "Fatima Tahir", organization: "NUST School of Electrical Engineering & Computer Sciences", tier: "ATTENDEE", number: "WB-26-0004" },
+  { name: "Ali Raza", organization: "Hamdard University", tier: "ATTENDEE", number: "WB-26-0005" },
+  { name: "Hassan Muhammad Kamran", organization: "Bahria University Karachi Campus", tier: "SUPPORTER", number: "WB-26-0006" },
+  { name: "Ayesha Siddiqui", organization: "University of the Punjab", tier: "ATTENDEE", number: "WB-26-0007" },
+  { name: "Usman Ghani", organization: "Arlinux Technologies", tier: "ATTENDEE", number: "WB-26-0008" },
+  { name: "Zainab Khalid", organization: "The Millenium Universal College", tier: "ATTENDEE", number: "WB-26-0009" },
+  { name: "Muhammad Bilal Ahmed", organization: "Ghulam Ishaq Khan Institute", tier: "SPEAKER", number: "WB-26-0010" },
+]
 
 interface BatchItem {
   tab: Tab
@@ -64,7 +92,6 @@ function cardFor(tab: Tab, config: EventConfig, onPhoto: (file: File) => void) {
       return (
         <MainEventCard
           venue={config.venue}
-          city={config.city}
           dateRange={config.dateRange}
           edition={config.edition}
         />
@@ -86,6 +113,8 @@ function cardFor(tab: Tab, config: EventConfig, onPhoto: (file: File) => void) {
       return <PartnerCard mode="sponsor" sponsor={config.sponsor} />
     case "Community Partner":
       return <PartnerCard mode="partner" partner={config.partner} />
+    case "Attendees":
+      return <AttendeeCard attendee={SAMPLE_ATTENDEES[0]} />
   }
 }
 
@@ -106,10 +135,28 @@ export default function App() {
   const [active, setActive] = useState<Tab>("Main Event")
   const [showCustomizer, setShowCustomizer] = useState(false)
   const [config, setConfig] = useState<EventConfig>(() => loadEventConfig())
+  const [gradientId, setGradientId] = useState<string>(() => {
+    try {
+      return (
+        localStorage.getItem(GRADIENT_STORAGE_KEY) || DEFAULT_GRADIENT_ID
+      )
+    } catch {
+      return DEFAULT_GRADIENT_ID
+    }
+  })
 
   useEffect(() => {
     saveEventConfig(config)
   }, [config])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(GRADIENT_STORAGE_KEY, gradientId)
+    } catch {}
+  }, [gradientId])
+
+  const gradientCss =
+    GRADIENT_PRESETS.find((p) => p.id === gradientId)?.css || BRAND_GRADIENT
 
   const patch = useCallback(
     <K extends keyof EventConfig>(key: K, value: EventConfig[K]) =>
@@ -246,14 +293,15 @@ export default function App() {
   }, [batch, config, exportCard, flash])
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#06040C",
-        color: "#FFFFFF",
-        fontFamily: "'Instrument Sans', sans-serif",
-      }}
-    >
+    <GradientContext.Provider value={gradientCss}>
+      <div
+        style={{
+          minHeight: "100vh",
+          background: "#06040C",
+          color: "#FFFFFF",
+          fontFamily: "var(--font-brand)",
+        }}
+      >
       <div
         style={{ maxWidth: "1040px", margin: "0 auto", padding: "48px 24px" }}
       >
@@ -282,7 +330,7 @@ export default function App() {
             />
             <span
               style={{
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "var(--font-mono)",
                 fontSize: "11px",
                 color: "rgba(255, 255, 255, 0.75)",
                 letterSpacing: "0.14em",
@@ -305,7 +353,7 @@ export default function App() {
             <div>
               <h1
                 style={{
-                  fontFamily: "'Space Mono', monospace",
+                  fontFamily: "var(--font-mono)",
                   fontSize: "clamp(24px, 3.2vw, 32px)",
                   fontWeight: 700,
                   letterSpacing: "-0.02em",
@@ -338,7 +386,7 @@ export default function App() {
                   ? "1px solid rgba(0, 223, 216, 0.4)"
                   : "1px solid rgba(255, 255, 255, 0.12)",
                 color: showCustomizer ? ACCENT : "rgba(255, 255, 255, 0.8)",
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "var(--font-mono)",
                 fontSize: "11px",
                 letterSpacing: "0.08em",
                 cursor: "pointer",
@@ -365,7 +413,7 @@ export default function App() {
               onClick={() => setActive(tab.id)}
               style={{
                 padding: "12px 18px",
-                fontFamily: "'Instrument Sans', sans-serif",
+                fontFamily: "var(--font-brand)",
                 fontSize: "14px",
                 fontWeight: active === tab.id ? 600 : 400,
                 color:
@@ -386,7 +434,7 @@ export default function App() {
               <span
                 style={{
                   marginLeft: "8px",
-                  fontFamily: "'Space Mono', monospace",
+                  fontFamily: "var(--font-mono)",
                   fontSize: "10px",
                   color:
                     active === tab.id
@@ -406,7 +454,7 @@ export default function App() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            fontFamily: "'Space Mono', monospace",
+            fontFamily: "var(--font-mono)",
             fontSize: "11px",
             color: "rgba(255, 255, 255, 0.35)",
             marginBottom: "16px",
@@ -415,6 +463,71 @@ export default function App() {
         >
           <span>{current.description}</span>
           <span>{current.size}</span>
+        </div>
+
+        {/* Background Gradient Switcher */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "8px",
+            marginBottom: "16px",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "10px",
+              color: "rgba(255, 255, 255, 0.45)",
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              marginRight: "4px",
+            }}
+          >
+            Background:
+          </span>
+          {GRADIENT_PRESETS.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => setGradientId(p.id)}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "5px 12px 5px 5px",
+                borderRadius: "9999px",
+                background:
+                  gradientId === p.id
+                    ? "rgba(0, 223, 216, 0.15)"
+                    : "rgba(255, 255, 255, 0.04)",
+                border:
+                  gradientId === p.id
+                    ? `1px solid ${ACCENT}`
+                    : "1px solid rgba(255, 255, 255, 0.1)",
+                color:
+                  gradientId === p.id
+                    ? ACCENT
+                    : "rgba(255, 255, 255, 0.6)",
+                fontFamily: "var(--font-mono)",
+                fontSize: "11px",
+                cursor: "pointer",
+                transition: "all 0.15s ease",
+              }}
+            >
+              <span
+                style={{
+                  width: "18px",
+                  height: "18px",
+                  borderRadius: "50%",
+                  background: p.css,
+                  border: "1px solid rgba(255, 255, 255, 0.25)",
+                  flexShrink: 0,
+                }}
+              />
+              {p.name}
+            </button>
+          ))}
         </div>
 
         {/* Prominent Export Action Bar */}
@@ -454,7 +567,7 @@ export default function App() {
                 background: "linear-gradient(135deg, #00DFD8 0%, #00B4D8 100%)",
                 border: "none",
                 color: "#06040C",
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "var(--font-mono)",
                 fontSize: "12px",
                 fontWeight: 700,
                 letterSpacing: "0.04em",
@@ -497,7 +610,7 @@ export default function App() {
                   "linear-gradient(135deg, rgba(124, 58, 237, 0.35) 0%, rgba(0, 223, 216, 0.25) 100%)",
                 border: "1px solid rgba(0, 223, 216, 0.45)",
                 color: "#FFFFFF",
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "var(--font-mono)",
                 fontSize: "11px",
                 fontWeight: 700,
                 cursor: isExporting ? "wait" : "pointer",
@@ -505,7 +618,7 @@ export default function App() {
                 transition: "all 0.15s ease",
               }}
             >
-              {isExporting ? "Batch Running..." : "Export All (8 files)"}
+              {isExporting ? "Batch Running..." : `Export All (${TABS.length * 2} files)`}
             </button>
 
             <button
@@ -520,7 +633,7 @@ export default function App() {
                 background: "rgba(255, 255, 255, 0.08)",
                 border: "1px solid rgba(255, 255, 255, 0.18)",
                 color: "#FFFFFF",
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "var(--font-mono)",
                 fontSize: "11px",
                 fontWeight: 600,
                 cursor: isExporting ? "wait" : "pointer",
@@ -558,7 +671,7 @@ export default function App() {
             {exportStatus ? (
               <span
                 style={{
-                  fontFamily: "'Space Mono', monospace",
+                  fontFamily: "var(--font-mono)",
                   fontSize: "11px",
                   color: ACCENT,
                   padding: "5px 12px",
@@ -573,7 +686,7 @@ export default function App() {
             ) : (
               <span
                 style={{
-                  fontFamily: "'Space Mono', monospace",
+                  fontFamily: "var(--font-mono)",
                   fontSize: "10px",
                   color: "rgba(255, 255, 255, 0.45)",
                   letterSpacing: "0.06em",
@@ -652,7 +765,7 @@ export default function App() {
             >
               <div
                 style={{
-                  fontFamily: "'Space Mono', monospace",
+                  fontFamily: "var(--font-mono)",
                   fontSize: "12px",
                   fontWeight: 700,
                   color: ACCENT,
@@ -670,7 +783,7 @@ export default function App() {
                   background: "rgba(255, 255, 255, 0.05)",
                   border: "1px solid rgba(255, 255, 255, 0.18)",
                   color: "rgba(255, 255, 255, 0.7)",
-                  fontFamily: "'Space Mono', monospace",
+                  fontFamily: "var(--font-mono)",
                   fontSize: "10px",
                   cursor: "pointer",
                 }}
@@ -735,7 +848,7 @@ export default function App() {
                   <div>
                     <div
                       style={{
-                        fontFamily: "'Space Mono', monospace",
+                        fontFamily: "var(--font-mono)",
                         fontSize: "11px",
                         fontWeight: 700,
                         color: ACCENT,
@@ -763,7 +876,7 @@ export default function App() {
                 <div style={{ marginBottom: "14px" }}>
                   <span
                     style={{
-                      fontFamily: "'Space Mono', monospace",
+                      fontFamily: "var(--font-mono)",
                       fontSize: "10px",
                       color: "rgba(255, 255, 255, 0.45)",
                       textTransform: "uppercase",
@@ -795,7 +908,7 @@ export default function App() {
                           config.speaker.name === p.name
                             ? ACCENT
                             : "rgba(255, 255, 255, 0.7)",
-                        fontFamily: "'Space Mono', monospace",
+                        fontFamily: "var(--font-mono)",
                         fontSize: "11px",
                         cursor: "pointer",
                       }}
@@ -867,7 +980,7 @@ export default function App() {
                     <label
                       style={{
                         display: "block",
-                        fontFamily: "'Space Mono', monospace",
+                        fontFamily: "var(--font-mono)",
                         fontSize: "10px",
                         color: "rgba(255, 255, 255, 0.45)",
                         marginBottom: "6px",
@@ -906,7 +1019,7 @@ export default function App() {
                           background: "rgba(0, 223, 216, 0.15)",
                           border: "1px solid rgba(0, 223, 216, 0.4)",
                           color: ACCENT,
-                          fontFamily: "'Space Mono', monospace",
+                          fontFamily: "var(--font-mono)",
                           fontSize: "11px",
                           fontWeight: 700,
                           cursor: "pointer",
@@ -1042,7 +1155,7 @@ export default function App() {
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <span
               style={{
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "var(--font-mono)",
                 fontSize: "11px",
                 color: ACCENT,
                 letterSpacing: "0.06em",
@@ -1053,7 +1166,7 @@ export default function App() {
             </span>
             <span
               style={{
-                fontFamily: "'Instrument Sans', sans-serif",
+                fontFamily: "var(--font-brand)",
                 fontSize: "12px",
                 color: "rgba(255, 255, 255, 0.55)",
               }}
@@ -1065,7 +1178,7 @@ export default function App() {
 
           <div
             style={{
-              fontFamily: "'Space Mono', monospace",
+              fontFamily: "var(--font-mono)",
               fontSize: "10px",
               color: "rgba(255, 255, 255, 0.3)",
               letterSpacing: "0.06em",
@@ -1076,5 +1189,6 @@ export default function App() {
         </div>
       </div>
     </div>
+    </GradientContext.Provider>
   )
 }

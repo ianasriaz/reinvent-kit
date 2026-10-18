@@ -15,11 +15,12 @@ export default function AwsReinventLogo({
 }: AwsReinventLogoProps) {
   const SIZES = {
     sm: {
-      awsSize: "clamp(9px, 1.4cqi, 13px)",
-      reSize: "clamp(12px, 1.9cqi, 17px)",
-      inventSize: "clamp(24px, 3.6cqi, 34px)",
+      awsSize: "clamp(12px, 1.7cqi, 16px)",
+      reSize: "clamp(15px, 2.3cqi, 20px)",
+      inventSize: "clamp(28px, 4.3cqi, 42px)",
       gap: "clamp(3px, 0.5cqi, 6px)",
-      sublineSize: "clamp(6.5px, 0.95cqi, 9px)",
+      sublineSize: "clamp(8px, 1.05cqi, 11px)",
+      stackTuck: "-0.2cqi",
     },
     md: {
       awsSize: "clamp(12px, 1.8cqi, 18px)",
@@ -27,6 +28,7 @@ export default function AwsReinventLogo({
       inventSize: "clamp(32px, 4.8cqi, 48px)",
       gap: "clamp(4px, 0.7cqi, 8px)",
       sublineSize: "clamp(8px, 1.1cqi, 11px)",
+      stackTuck: "0.22cqi",
     },
     lg: {
       awsSize: "clamp(16px, 2.5cqi, 26px)",
@@ -34,43 +36,53 @@ export default function AwsReinventLogo({
       inventSize: "clamp(46px, 7cqi, 74px)",
       gap: "clamp(6px, 1cqi, 10px)",
       sublineSize: "clamp(10px, 1.4cqi, 14px)",
+      stackTuck: "0.25cqi",
     },
     hero: {
       awsSize: "clamp(20px, 2.5cqi, 36px)",
       reSize: "clamp(28px, 3.6cqi, 50px)",
       inventSize: "clamp(58px, 7.5cqi, 100px)",
       gap: "clamp(8px, 1cqi, 14px)",
-      sublineSize: "clamp(12px, 1.6cqi, 16px)",
+      sublineSize: "clamp(14px, 2.2cqi, 26px)",
+      stackTuck: "-0.05cqi",
     },
   }
 
   const s = SIZES[size] || SIZES.md
+  const bold = 400
 
   return (
     <div
-      className={`inline-flex flex-col items-end text-right select-none ${className}`}
+      className={`inline-flex flex-col select-none ${className}`}
       style={{
-        fontFamily: "'Space Mono', monospace",
+        fontFamily: "var(--font-mono)",
         color: "#FFFFFF",
         ...style,
       }}
       aria-label="AWS re:Invent"
     >
-      {/* Logo Top Row: Stacked AWS re: + Invent */}
-      <div className="inline-flex items-baseline" style={{ gap: s.gap }}>
-        {/* Stacked Prefix: AWS / re: */}
-        <div
-          className="flex flex-col items-start leading-none"
+      {/* Logo Top Row: re: and Invent share one baseline; AWS hangs above re: */}
+      <div className="inline-flex items-baseline self-end" style={{ gap: s.gap }}>
+        {/* Stacked Prefix — re: in flow (baseline anchor), AWS absolutely
+            positioned directly above it */}
+        <span
+          className="relative inline-block"
           style={{
-            alignSelf: "flex-end",
-            paddingBottom: "clamp(2px, 0.4cqi, 5px)",
+            fontFamily: "var(--font-mono)",
+            fontSize: s.reSize,
+            fontWeight: bold,
+            letterSpacing: "-0.01em",
+            lineHeight: 1,
+            color: "#FFFFFF",
           }}
         >
           <span
+            className="absolute left-0"
             style={{
-              fontFamily: "'Space Mono', monospace",
+              bottom: `calc(100% - ${s.stackTuck})`,
+              fontFamily: "var(--font-mono)",
               fontSize: s.awsSize,
-              fontWeight: 700,
+              fontWeight: bold,
               letterSpacing: "0.02em",
               lineHeight: 1,
               color: "#FFFFFF",
@@ -78,27 +90,15 @@ export default function AwsReinventLogo({
           >
             AWS
           </span>
-          <span
-            style={{
-              fontFamily: "'Space Mono', monospace",
-              fontSize: s.reSize,
-              fontWeight: 700,
-              letterSpacing: "-0.01em",
-              lineHeight: 1,
-              marginTop: "clamp(2px, 0.3cqi, 4px)",
-              color: "#FFFFFF",
-            }}
-          >
-            re:
-          </span>
-        </div>
+          re:
+        </span>
 
         {/* Hero Keyword: Invent */}
         <span
           style={{
-            fontFamily: "'Space Mono', monospace",
+            fontFamily: "var(--font-mono)",
             fontSize: s.inventSize,
-            fontWeight: 700,
+            fontWeight: bold,
             letterSpacing: "-0.03em",
             lineHeight: 0.95,
             color: "#FFFFFF",
@@ -108,9 +108,10 @@ export default function AwsReinventLogo({
         </span>
       </div>
 
-      {/* Optional perfectly aligned subline */}
+      {/* Subline centered across the full A→B width of the lockup */}
       {subline && (
         <span
+          className="w-full text-center"
           style={{
             fontSize: s.sublineSize,
             fontWeight: 700,
@@ -119,7 +120,6 @@ export default function AwsReinventLogo({
             textTransform: "uppercase",
             marginTop: "clamp(3px, 0.4cqi, 5px)",
             lineHeight: 1,
-            textAlign: "right",
           }}
         >
           {subline}

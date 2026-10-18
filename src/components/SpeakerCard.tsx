@@ -22,13 +22,13 @@ export default function SpeakerCard({
   speakerCompany = "Tkxel",
   speakerHandle = "@sumama_dev",
   talkTitle = "BUILDING APPLICATION USING KIRO AND AWS CLI TECHNIQUES",
-  venue = "AIR UNIVERSITY, MAIN CAMPUS",
+  venue = "AIR UNIVERSITY",
   dateRange = "DEC, 2026",
   speakerPhoto = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=600&fit=crop&crop=face&auto=format&q=85",
 }: SpeakerCardProps) {
   return (
     <div className="@container relative w-full aspect-square overflow-hidden select-none rounded-lg shadow-2xl">
-      <MeshBackground variant="speaker">
+      <MeshBackground>
         {/* Full Edge-to-Edge Panoramic Islamabad Skyline at 50% opacity */}
         <IslamabadHorizon opacity={0.5} />
 
@@ -40,65 +40,63 @@ export default function SpeakerCard({
             boxSizing: "border-box",
           }}
         >
-          {/* Header Row: AWS Logo on Left, Perfectly Aligned AWS re:Invent on Right */}
+          {/* Header Row: Aligned AWS re:Invent on Left, AWS Logo on Right */}
           <div className="flex items-start justify-between w-full">
-            <AwsLogo size={42} />
-
-            {/* Top-Right: Aligned AWS re:Invent + Watch & Build Subline */}
             <AwsReinventLogo size="sm" subline="WATCH & BUILD PARTY 2026" />
+
+            <AwsLogo size={54} />
           </div>
 
-          {/* Middle Body Area: Kicker Placed Above the Image on Standalone Row */}
-          <div className="my-auto w-full flex flex-col items-start gap-4">
-            {/* MEET OUR SPEAKER: Placed on its own row ABOVE the image height */}
-            <div
-              className="inline-flex items-center gap-2"
-              style={{
-                background: "#FFFFFF",
-                padding: "clamp(5px, 0.9cqi, 8px) clamp(12px, 1.8cqi, 18px)",
-                borderRadius: "9999px",
-                boxShadow: "0 4px 16px rgba(0, 0, 0, 0.18)",
-              }}
-            >
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#06040C"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                <line x1="12" y1="19" x2="12" y2="23" />
-                <line x1="8" y1="23" x2="16" y2="23" />
-              </svg>
-              <span
-                style={{
-                  fontFamily: "'Space Mono', monospace",
-                  fontSize: "clamp(9px, 1.4cqi, 12px)",
-                  fontWeight: 700,
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  color: "#06040C",
-                  lineHeight: 1,
-                }}
-              >
-                MEET OUR SPEAKER
-              </span>
-            </div>
-
+          {/* Middle Body Area — content group centered on the banner, photo centered too */}
+          <div className="flex-1 w-full flex flex-col">
             {/* Split Section: Details on Left, Large Framed Portrait on Right */}
-            <div className="flex items-center justify-between gap-5 w-full">
+            <div className="flex items-center justify-between gap-5 w-full flex-1">
               {/* Left Column: Evenly Spaced Name, Designation, Topic & Date/Venue */}
-              <div className="flex-1 flex flex-col justify-center gap-2.5 pr-1">
+              <div className="flex-1 flex flex-col justify-center gap-3.5 pr-1">
+                {/* MEET OUR SPEAKER kicker */}
+                <div
+                  className="self-start inline-flex items-center gap-2"
+                  style={{
+                    background: "#FFFFFF",
+                    padding: "clamp(5px, 0.9cqi, 8px) clamp(12px, 1.8cqi, 18px)",
+                    borderRadius: "9999px",
+                    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.18)",
+                  }}
+                >
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#06040C"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                    <line x1="12" y1="19" x2="12" y2="23" />
+                    <line x1="8" y1="23" x2="16" y2="23" />
+                  </svg>
+                  <span
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "clamp(9px, 1.4cqi, 12px)",
+                      fontWeight: 700,
+                      letterSpacing: "0.06em",
+                      textTransform: "uppercase",
+                      color: "#06040C",
+                      lineHeight: 1,
+                    }}
+                  >
+                    MEET OUR SPEAKER
+                  </span>
+                </div>
                 {/* Speaker Name */}
                 <h1
                   style={{
-                    fontFamily: "'Space Mono', monospace",
-                    fontSize: "clamp(20px, 3.8cqi, 34px)",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "clamp(26px, 5.6cqi, 50px)",
                     fontWeight: 700,
                     color: "#FFFFFF",
                     letterSpacing: "-0.02em",
@@ -113,8 +111,8 @@ export default function SpeakerCard({
                 {/* Designation & Company */}
                 <p
                   style={{
-                    fontFamily: "'Instrument Sans', sans-serif",
-                    fontSize: "clamp(12px, 2cqi, 16px)",
+                    fontFamily: "var(--font-brand)",
+                    fontSize: "clamp(14px, 2.4cqi, 18px)",
                     fontWeight: 500,
                     color: "rgba(255, 255, 255, 0.95)",
                     lineHeight: 1.3,
@@ -129,9 +127,9 @@ export default function SpeakerCard({
                     <span
                       style={{
                         marginLeft: "6px",
-                        fontFamily: "'Space Mono', monospace",
+                        fontFamily: "var(--font-mono)",
                         fontSize: "clamp(9px, 1.4cqi, 12px)",
-                        color: "#00DFD8",
+                        color: "rgba(255, 255, 255, 0.7)",
                         fontWeight: 700,
                       }}
                     >
@@ -150,8 +148,8 @@ export default function SpeakerCard({
                 >
                   <p
                     style={{
-                      fontFamily: "'Space Mono', monospace",
-                      fontSize: "clamp(10px, 1.6cqi, 14px)",
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "clamp(13px, 2.4cqi, 20px)",
                       fontWeight: 700,
                       lineHeight: 1.35,
                       color: "#FFFFFF",
@@ -175,8 +173,8 @@ export default function SpeakerCard({
               {/* Right Column: Large Framed Portrait */}
               <div
                 style={{
-                  width: "clamp(145px, 32cqi, 250px)",
-                  height: "clamp(160px, 35cqi, 270px)",
+                  width: "clamp(170px, 38cqi, 300px)",
+                  height: "clamp(190px, 52cqi, 340px)",
                   borderRadius: "26px",
                   border: "3.5px solid #FFFFFF",
                   overflow: "hidden",
@@ -195,8 +193,8 @@ export default function SpeakerCard({
             </div>
           </div>
 
-          {/* Bottom Footer: NO date and venue covering the footer image */}
-          <div className="h-2" />
+          {/* Bottom spacer — balances the header so the body's center = the banner's center */}
+          <div style={{ height: "54px" }} />
         </div>
       </MeshBackground>
     </div>

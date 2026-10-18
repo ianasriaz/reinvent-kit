@@ -21,7 +21,7 @@ export default function SponsorCard({
 }: SponsorCardProps) {
   return (
     <div className="@container relative w-full aspect-square overflow-hidden select-none rounded-lg shadow-2xl">
-      <MeshBackground variant="sponsor">
+      <MeshBackground>
         {/* Full Edge-to-Edge Panoramic Islamabad Skyline at 50% opacity */}
         <IslamabadHorizon opacity={0.5} />
 
@@ -33,11 +33,11 @@ export default function SponsorCard({
             boxSizing: "border-box",
           }}
         >
-          {/* Header Row: AWS Logo on Left, Aligned AWS re:Invent on Right */}
+          {/* Header Row: Aligned AWS re:Invent on Left, AWS Logo on Right */}
           <div className="flex items-start justify-between w-full">
-            <AwsLogo size={42} />
-
             <AwsReinventLogo size="sm" subline="WATCH & BUILD PARTY 2026" />
+
+            <AwsLogo size={54} />
           </div>
 
           {/* Centerpiece — Sponsor Logo + Name + Tier */}
@@ -45,7 +45,7 @@ export default function SponsorCard({
             {/* Category Label */}
             <p
               style={{
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "var(--font-mono)",
                 fontSize: "clamp(11px, 2cqi, 14px)",
                 fontWeight: 700,
                 color: "rgba(255, 255, 255, 0.9)",
@@ -82,7 +82,7 @@ export default function SponsorCard({
               ) : (
                 <span
                   style={{
-                    fontFamily: "'Space Mono', monospace",
+                    fontFamily: "var(--font-mono)",
                     fontSize: "clamp(12px, 2.4cqi, 16px)",
                     fontWeight: 700,
                     color: "#0F172A",
@@ -97,7 +97,7 @@ export default function SponsorCard({
             {/* Sponsor Name in Space Mono */}
             <h1
               style={{
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "var(--font-mono)",
                 fontSize: "clamp(22px, 4.4cqi, 38px)",
                 fontWeight: 700,
                 color: "#FFFFFF",
@@ -119,7 +119,7 @@ export default function SponsorCard({
             >
               <span
                 style={{
-                  fontFamily: "'Space Mono', monospace",
+                  fontFamily: "var(--font-mono)",
                   fontSize: "clamp(10px, 1.8cqi, 13px)",
                   fontWeight: 700,
                   color: "#FFFFFF",

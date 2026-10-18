@@ -7,20 +7,18 @@ import type { EventConfig } from "../data/eventConfig"
 
 interface MainEventCardProps {
   venue?: string
-  city?: string
   dateRange?: string
   edition?: string
 }
 
 export default function MainEventCard({
-  venue = "AIR UNIVERSITY, MAIN CAMPUS",
-  city = "Islamabad",
+  venue = "AIR UNIVERSITY",
   dateRange = "DEC, 2026",
   edition = "2026",
 }: MainEventCardProps) {
   return (
     <div className="@container relative w-full aspect-[1200/630] overflow-hidden select-none rounded-lg shadow-2xl">
-      <MeshBackground variant="main">
+      <MeshBackground>
         {/* Full Edge-to-Edge Panoramic Islamabad Skyline at full vibrant opacity (not 50%) */}
         <IslamabadHorizon
           opacity={0.95}
@@ -37,11 +35,11 @@ export default function MainEventCard({
         >
           {/* Top Header Row */}
           <div className="flex items-center justify-between w-full">
-            <AwsLogo size={42} />
+            <AwsLogo size={54} />
 
             <div
               style={{
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "var(--font-mono)",
                 fontSize: "clamp(10px, 1.2cqi, 13px)",
                 letterSpacing: "0.14em",
                 color: "rgba(255, 255, 255, 0.85)",
@@ -49,27 +47,26 @@ export default function MainEventCard({
                 fontWeight: 700,
               }}
             >
-              Watch &amp; Build Party · {edition}
+              Islamabad, Pakistan
             </div>
           </div>
 
           {/* Hero Core Block: Elevated into Upper-Middle Area so it NEVER mixes with the footer image */}
           <div
-            className="flex flex-col items-start gap-3.5"
+            className="flex flex-col items-center self-center text-center gap-3.5"
             style={{
               marginTop: "clamp(6px, 1.2cqi, 16px)",
-              marginBottom: "auto",
-              maxWidth: "850px",
+              width: "fit-content",
             }}
           >
-            {/* Signature AWS re:Invent Lockup */}
-            <AwsReinventLogo size="hero" />
+            {/* Signature AWS re:Invent Lockup — same treatment as the card headers */}
+            <AwsReinventLogo size="hero" subline={`WATCH & BUILD PARTY ${edition}`} />
 
-            {/* Pill Badge */}
+            {/* Date / Venue Pill */}
             <div
-              className="inline-flex items-center"
+              className="flex w-full items-center justify-center"
               style={{
-                padding: "clamp(6px, 1.1cqi, 11px) clamp(16px, 2.6cqi, 28px)",
+                padding: "clamp(7px, 1.2cqi, 12px) clamp(10px, 1.6cqi, 19px)",
                 borderRadius: "9999px",
                 border: "1.5px solid rgba(255, 255, 255, 0.85)",
                 background: "rgba(255, 255, 255, 0.1)",
@@ -77,28 +74,13 @@ export default function MainEventCard({
                 boxShadow: "0 4px 20px rgba(0, 0, 0, 0.12)",
               }}
             >
-              <span
-                style={{
-                  fontFamily: "'Space Mono', monospace",
-                  fontSize: "clamp(11px, 1.6cqi, 18px)",
-                  fontWeight: 700,
-                  color: "#FFFFFF",
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  lineHeight: 1,
-                }}
-              >
-                WATCH &amp; BUILD PARTY {edition} | {city.toUpperCase()}
-              </span>
+              <EventMeta
+                size="lg"
+                dateRange={dateRange}
+                venue={venue}
+                className="w-full justify-center"
+              />
             </div>
-
-            {/* Date and Venue placed directly below the badge in clear open space */}
-            <EventMeta
-              size="lg"
-              dateRange={dateRange}
-              venue={venue}
-              className="mt-1"
-            />
           </div>
 
           {/* Bottom space reserved for the skyline without text collision */}
