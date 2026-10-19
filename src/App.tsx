@@ -127,6 +127,8 @@ function cardFor(tab: Tab, config: EventConfig, onPhoto: (file: File) => void) {
       return (
         <PhotoWall
           edition={config.edition}
+          sponsor={config.sponsor}
+          partner={config.partner}
         />
       )
   }
@@ -1106,6 +1108,17 @@ export default function App() {
                       }))
                     }
                   />
+                  <TextField
+                    label="Sponsor Logo URL"
+                    value={config.sponsor.logo ?? ""}
+                    placeholder="https://..."
+                    onChange={(v) =>
+                      setConfig((prev) => ({
+                        ...prev,
+                        sponsor: { ...prev.sponsor, logo: v },
+                      }))
+                    }
+                  />
                 </div>
               </div>
             )}
@@ -1142,6 +1155,17 @@ export default function App() {
                       setConfig((prev) => ({
                         ...prev,
                         partner: { ...prev.partner, type: v },
+                      }))
+                    }
+                  />
+                  <TextField
+                    label="Partner Logo URL"
+                    value={config.partner.logo ?? ""}
+                    placeholder="https://..."
+                    onChange={(v) =>
+                      setConfig((prev) => ({
+                        ...prev,
+                        partner: { ...prev.partner, logo: v },
                       }))
                     }
                   />

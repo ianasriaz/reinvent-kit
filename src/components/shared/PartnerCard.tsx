@@ -2,6 +2,7 @@ import MeshBackground from "../MeshBackground"
 import IslamabadHorizon from "../IslamabadHorizon"
 import AwsReinventLogo from "../AwsReinventLogo"
 import AwsLogo from "../AwsLogo"
+import AwsSbgLogo from "../AwsSbgLogo"
 import type { PartnerCardState, Tier } from "../../data/eventConfig"
 
 type PartnerMode = "sponsor" | "partner"
@@ -45,11 +46,14 @@ export default function PartnerCard({
             boxSizing: "border-box",
           }}
         >
-          {/* Header Row: Aligned AWS re:Invent on Left, AWS Logo on Right */}
+          {/* Header Row: Aligned AWS re:Invent on Left, AWS + SBG Logos on Right */}
           <div className="flex items-start justify-between w-full">
             <AwsReinventLogo size="sm" subline="WATCH & BUILD PARTY 2026" />
 
-            <AwsLogo size={54} />
+            <div className="flex items-center" style={{ gap: "clamp(14px, 2.2cqi, 26px)" }}>
+              <AwsLogo size={54} />
+              <AwsSbgLogo size={30} />
+            </div>
           </div>
 
           {/* Centerpiece — Logo + Name + Tier/Type Pill */}

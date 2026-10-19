@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import QRCode from "qrcode"
 import AwsReinventLogo from "./AwsReinventLogo"
 import AwsLogo from "./AwsLogo"
+import AwsSbgLogo from "./AwsSbgLogo"
 import IslamabadHorizon from "./IslamabadHorizon"
 import MeshBackground from "./MeshBackground"
 
@@ -71,7 +72,10 @@ export default function AttendeeCard({
             style={{ padding: "clamp(18px, 4cqi, 50px)", paddingTop: "clamp(20px, 4.6cqi, 56px)" }}
           >
             <AwsReinventLogo size="md" subline="WATCH & BUILD PARTY 2026" />
-            <AwsLogo size={68} />
+            <div className="flex items-center" style={{ gap: "clamp(14px, 2.2cqi, 26px)" }}>
+              <AwsLogo size={68} />
+              <AwsSbgLogo size={36} />
+            </div>
           </div>
         </MeshBackground>
       </div>

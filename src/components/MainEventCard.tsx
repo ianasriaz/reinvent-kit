@@ -2,6 +2,7 @@ import MeshBackground from "./MeshBackground"
 import IslamabadHorizon from "./IslamabadHorizon"
 import AwsReinventLogo from "./AwsReinventLogo"
 import AwsLogo from "./AwsLogo"
+import AwsSbgLogo from "./AwsSbgLogo"
 import EventMeta from "./shared/EventMeta"
 import type { EventConfig } from "../data/eventConfig"
 
@@ -35,7 +36,10 @@ export default function MainEventCard({
         >
           {/* Top Header Row */}
           <div className="flex items-center justify-between w-full">
-            <AwsLogo size={54} />
+            <div className="flex items-center" style={{ gap: "clamp(14px, 2.2cqi, 26px)" }}>
+              <AwsLogo size={54} />
+              <AwsSbgLogo size={36} />
+            </div>
 
             <div
               style={{
