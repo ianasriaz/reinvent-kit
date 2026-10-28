@@ -29,37 +29,15 @@ import PhotoWall from "./components/PhotoWall"
 import TextField, { ChoiceGroup } from "./components/ui/TextField"
 
 const TABS = [
-  {
-    id: "Main Event",
-    size: "1200 × 630",
-    description: "Wide landscape banner for Twitter/X, LinkedIn & Web",
-  },
-  {
-    id: "Speaker",
-    size: "1080 × 1080",
-    description: "Square card spotlighting keynote and session speakers",
-  },
-  {
-    id: "Sponsor",
-    size: "1080 × 1080",
-    description: "Square card recognizing event sponsors and tiers",
-  },
-  {
-    id: "Community Partner",
-    size: "1080 × 1080",
-    description: "Square card featuring student & developer alliances",
-  },
+  { id: "Main Event", size: "1200 × 630" },
+  { id: "Speaker", size: "1080 × 1080" },
+  { id: "Sponsor", size: "1080 × 1080" },
+  { id: "Community Partner", size: "1080 × 1080" },
   {
     id: "Attendees",
     size: "1063 × 1488",
-    description:
-      "Vertical attendee badge · 90 × 126 mm · 4-up printable on A4 @ 300 DPI",
   },
-  {
-    id: "Photo Wall",
-    size: "1920 × 1080",
-    description: "Photo-op backdrop · visitors stand front & center, corners do the branding",
-  },
+  { id: "Photo Wall", size: "1920 × 1080" },
 ] as const
 
 type Tab = typeof TABS[number]["id"]
@@ -321,97 +299,46 @@ export default function App() {
       <div
         style={{ maxWidth: "1040px", margin: "0 auto", padding: "48px 24px" }}
       >
-        {/* Header Bar */}
-        <div style={{ marginBottom: "32px" }}>
-          <div
+        {/* Header */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "16px",
+            marginBottom: "24px",
+          }}
+        >
+          <h1
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "4px 12px",
-              borderRadius: "9999px",
-              background: "rgba(255, 255, 255, 0.04)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              marginBottom: "12px",
+              fontSize: "20px",
+              fontWeight: 700,
+              letterSpacing: "-0.01em",
+              margin: 0,
             }}
           >
-            <span
-              style={{
-                width: "6px",
-                height: "6px",
-                borderRadius: "50%",
-                backgroundColor: ACCENT,
-                boxShadow: `0 0 8px ${ACCENT}`,
-              }}
-            />
-            <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "11px",
-                color: "rgba(255, 255, 255, 0.75)",
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-              }}
-            >
-              AWS re:Invent 2026 · Watch &amp; Build Party · Islamabad
-            </span>
-          </div>
-
-          <div
+            Brand Kit
+          </h1>
+          <button
+            onClick={() => setShowCustomizer(!showCustomizer)}
             style={{
-              display: "flex",
-              alignItems: "flex-end",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              gap: "16px",
+              padding: "8px 18px",
+              borderRadius: "8px",
+              background: showCustomizer
+                ? "rgba(0, 223, 216, 0.15)"
+                : "transparent",
+              border: "1px solid rgba(255, 255, 255, 0.2)",
+              color: showCustomizer ? ACCENT : "rgba(255, 255, 255, 0.85)",
+              fontFamily: "var(--font-mono)",
+              fontSize: "12px",
+              letterSpacing: "0.04em",
+              cursor: "pointer",
+              transition: "all 0.15s ease",
             }}
           >
-            <div>
-              <h1
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "clamp(24px, 3.2vw, 32px)",
-                  fontWeight: 700,
-                  letterSpacing: "-0.02em",
-                  margin: 0,
-                }}
-              >
-                Brand Kit &amp; Social Templates
-              </h1>
-              <p
-                style={{
-                  fontSize: "13px",
-                  color: "rgba(255, 255, 255, 0.45)",
-                  marginTop: "4px",
-                }}
-              >
-                Ultra-minimal editorial direction · Zero grid lines · Diffused
-                purple-to-cyan mesh · Islamabad skyline horizon
-              </p>
-            </div>
-
-            <button
-              onClick={() => setShowCustomizer(!showCustomizer)}
-              style={{
-                padding: "8px 16px",
-                borderRadius: "8px",
-                background: showCustomizer
-                  ? "rgba(0, 223, 216, 0.15)"
-                  : "rgba(255, 255, 255, 0.06)",
-                border: showCustomizer
-                  ? "1px solid rgba(0, 223, 216, 0.4)"
-                  : "1px solid rgba(255, 255, 255, 0.12)",
-                color: showCustomizer ? ACCENT : "rgba(255, 255, 255, 0.8)",
-                fontFamily: "var(--font-mono)",
-                fontSize: "11px",
-                letterSpacing: "0.08em",
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-            >
-              {showCustomizer ? "Close Editor" : "Customize Props"}
-            </button>
-          </div>
+            {showCustomizer ? "Close" : "Edit Details"}
+          </button>
         </div>
 
         {/* Template Tabs */}
@@ -462,23 +389,6 @@ export default function App() {
               </span>
             </button>
           ))}
-        </div>
-
-        {/* Tab Description */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            fontFamily: "var(--font-mono)",
-            fontSize: "11px",
-            color: "rgba(255, 255, 255, 0.35)",
-            marginBottom: "16px",
-            letterSpacing: "0.06em",
-          }}
-        >
-          <span>{current.description}</span>
-          <span>{current.size}</span>
         </div>
 
         {/* Background Gradient Switcher */}
@@ -546,7 +456,7 @@ export default function App() {
           ))}
         </div>
 
-        {/* Prominent Export Action Bar */}
+        {/* Export Action Bar */}
         <div
           style={{
             display: "flex",
@@ -554,13 +464,9 @@ export default function App() {
             justifyContent: "space-between",
             flexWrap: "wrap",
             gap: "12px",
-            padding: "14px 20px",
-            background:
-              "linear-gradient(135deg, rgba(0, 223, 216, 0.08) 0%, rgba(124, 58, 237, 0.12) 100%)",
-            border: "1px solid rgba(0, 223, 216, 0.3)",
-            borderRadius: "14px",
+            padding: "14px 0",
+            borderTop: "1px solid rgba(255, 255, 255, 0.08)",
             marginBottom: "16px",
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
           }}
         >
           <div
@@ -580,7 +486,7 @@ export default function App() {
                 gap: "8px",
                 padding: "10px 20px",
                 borderRadius: "8px",
-                background: "linear-gradient(135deg, #00DFD8 0%, #00B4D8 100%)",
+                background: "#00DFD8",
                 border: "none",
                 color: "#06040C",
                 fontFamily: "var(--font-mono)",
@@ -588,7 +494,6 @@ export default function App() {
                 fontWeight: 700,
                 letterSpacing: "0.04em",
                 cursor: isExporting ? "wait" : "pointer",
-                boxShadow: "0 0 24px rgba(0, 223, 216, 0.45)",
                 transition: "all 0.15s ease",
               }}
             >
@@ -622,15 +527,14 @@ export default function App() {
                 gap: "7px",
                 padding: "10px 16px",
                 borderRadius: "8px",
-                background:
-                  "linear-gradient(135deg, rgba(124, 58, 237, 0.35) 0%, rgba(0, 223, 216, 0.25) 100%)",
-                border: "1px solid rgba(0, 223, 216, 0.45)",
+                background: "transparent",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
                 color: "#FFFFFF",
                 fontFamily: "var(--font-mono)",
                 fontSize: "11px",
                 fontWeight: 700,
                 cursor: isExporting ? "wait" : "pointer",
-                letterSpacing: "0.06em",
+                letterSpacing: "0.04em",
                 transition: "all 0.15s ease",
               }}
             >
@@ -690,27 +594,11 @@ export default function App() {
                   fontFamily: "var(--font-mono)",
                   fontSize: "11px",
                   color: ACCENT,
-                  padding: "5px 12px",
-                  borderRadius: "6px",
-                  background: "rgba(0, 223, 216, 0.15)",
-                  border: "1px solid rgba(0, 223, 216, 0.4)",
-                  boxShadow: "0 0 12px rgba(0, 223, 216, 0.25)",
                 }}
               >
                 {exportStatus}
               </span>
-            ) : (
-              <span
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "10px",
-                  color: "rgba(255, 255, 255, 0.45)",
-                  letterSpacing: "0.06em",
-                }}
-              >
-                Ready for LinkedIn, X &amp; Instagram
-              </span>
-            )}
+            ) : null}
           </div>
         </div>
 
@@ -726,10 +614,9 @@ export default function App() {
           <div
             style={{
               width: isSquare ? "min(100%, 540px)" : "100%",
-              borderRadius: "16px",
+              borderRadius: "8px",
               overflow: "hidden",
-              boxShadow:
-                "0 30px 100px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
               transition: "width 0.2s ease",
             }}
           >
@@ -759,16 +646,14 @@ export default function App() {
           </div>
         </div>
 
-        {/* Live Interactive Props Customizer Drawer */}
+        {/* Props Editor */}
         {showCustomizer && (
           <div
             style={{
-              marginTop: "28px",
-              padding: "24px",
-              background: "rgba(255, 255, 255, 0.03)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              borderRadius: "16px",
-              backdropFilter: "blur(16px)",
+              marginTop: "4px",
+              padding: "20px",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              borderRadius: "12px",
             }}
           >
             <div
@@ -779,17 +664,8 @@ export default function App() {
                 marginBottom: "16px",
               }}
             >
-              <div
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "12px",
-                  fontWeight: 700,
-                  color: ACCENT,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                }}
-              >
-                Interactive Prop Controls · {active}
+              <div style={{ fontSize: "13px", fontWeight: 700 }}>
+                {active} Details
               </div>
               <button
                 onClick={resetConfig}
@@ -848,47 +724,6 @@ export default function App() {
                   paddingTop: "16px",
                 }}
               >
-                <div
-                  style={{
-                    padding: "12px 16px",
-                    borderRadius: "10px",
-                    background: "rgba(0, 223, 216, 0.08)",
-                    border: "1px solid rgba(0, 223, 216, 0.25)",
-                    marginBottom: "16px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "12px",
-                  }}
-                >
-                  <span style={{ fontSize: "16px" }}>⚡</span>
-                  <div>
-                    <div
-                      style={{
-                        fontFamily: "var(--font-mono)",
-                        fontSize: "11px",
-                        fontWeight: 700,
-                        color: ACCENT,
-                        letterSpacing: "0.06em",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      AI Agent Automation Ready
-                    </div>
-                    <p
-                      style={{
-                        margin: "2px 0 0 0",
-                        fontSize: "12px",
-                        color: "rgba(255, 255, 255, 0.75)",
-                        lineHeight: 1.4,
-                      }}
-                    >
-                      Whenever you have a new speaker, just give me their photo,
-                      name, and talk topic in chat. I will instantly update the
-                      design and output the ready-to-upload visual.
-                    </p>
-                  </div>
-                </div>
-
                 <div style={{ marginBottom: "14px" }}>
                   <span
                     style={{
@@ -1174,57 +1009,6 @@ export default function App() {
             )}
           </div>
         )}
-
-        {/* Feature Highlights & Specifications Bar */}
-        <div
-          style={{
-            marginTop: "28px",
-            padding: "16px 20px",
-            background: "rgba(255, 255, 255, 0.02)",
-            border: "1px solid rgba(255, 255, 255, 0.06)",
-            borderRadius: "12px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "12px",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "11px",
-                color: ACCENT,
-                letterSpacing: "0.06em",
-                fontWeight: 700,
-              }}
-            >
-              REDESIGN SUMMARY:
-            </span>
-            <span
-              style={{
-                fontFamily: "var(--font-brand)",
-                fontSize: "12px",
-                color: "rgba(255, 255, 255, 0.55)",
-              }}
-            >
-              Zero Grid Lines · Diffused Mesh Palette · Floating Glass Panels ·
-              Bottom Horizon Silhouette
-            </span>
-          </div>
-
-          <div
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "10px",
-              color: "rgba(255, 255, 255, 0.3)",
-              letterSpacing: "0.06em",
-            }}
-          >
-            November 30 – December 4, 2026 · Islamabad
-          </div>
-        </div>
       </div>
     </div>
     </GradientContext.Provider>
