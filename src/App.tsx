@@ -26,6 +26,7 @@ import SpeakerCard from "./components/SpeakerCard"
 import PartnerCard from "./components/shared/PartnerCard"
 import AttendeeCard, { type Attendee } from "./components/AttendeeCard"
 import PhotoWall from "./components/PhotoWall"
+import PortraitPromptCard from "./components/PortraitPromptCard"
 import TextField, { ChoiceGroup } from "./components/ui/TextField"
 
 const TABS = [
@@ -38,6 +39,9 @@ const TABS = [
     size: "1063 × 1488",
   },
   { id: "Photo Wall", size: "1920 × 1080" },
+  { id: "Main Portrait", size: "1080 × 1350" },
+  { id: "Coming Soon", size: "1080 × 1350" },
+  { id: "Registration Open", size: "1080 × 1350" },
 ] as const
 
 type Tab = typeof TABS[number]["id"]
@@ -49,7 +53,12 @@ const TAB_WIDTH: Record<Tab, number> = {
   "Community Partner": 1080,
   Attendees: 1063,
   "Photo Wall": 1920,
+  "Main Portrait": 1080,
+  "Coming Soon": 1080,
+  "Registration Open": 1080,
 }
+
+const PORTRAIT_TABS: Tab[] = ["Main Portrait", "Coming Soon", "Registration Open"]
 
 const FILE_PREFIX = "aws-reinvent-islamabad"
 
@@ -109,6 +118,18 @@ function cardFor(tab: Tab, config: EventConfig, onPhoto: (file: File) => void) {
           partner={config.partner}
         />
       )
+    case "Main Portrait":
+      return (
+        <PortraitPromptCard
+          variant="main"
+          dateRange={config.dateRange}
+          venue={config.venue}
+        />
+      )
+    case "Coming Soon":
+      return <PortraitPromptCard variant="trailer" />
+    case "Registration Open":
+      return <PortraitPromptCard variant="open" />
   }
 }
 
@@ -613,7 +634,11 @@ export default function App() {
         >
           <div
             style={{
-              width: isSquare ? "min(100%, 540px)" : "100%",
+              width: PORTRAIT_TABS.includes(active)
+                ? "min(100%, 400px)"
+                : isSquare
+                  ? "min(100%, 540px)"
+                  : "100%",
               borderRadius: "8px",
               overflow: "hidden",
               border: "1px solid rgba(255, 255, 255, 0.1)",
