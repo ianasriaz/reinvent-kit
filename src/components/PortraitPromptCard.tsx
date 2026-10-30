@@ -20,9 +20,8 @@ const REGISTER_URL = "https://awsairuniversity.com/aws-reinvent/"
 
 /**
  * Portrait 4:5 prompt family — one skeleton, three variants.
- * Layering: mesh gradient → cyan horizon glow → dark scrim → skyline →
- * glowing ISLAMABAD → content. The scrim guarantees type contrast on any
- * gradient preset.
+ * Layering: mesh gradient → cyan horizon glow → skyline → glowing
+ * ISLAMABAD → content. Background treatment matches every other kit card.
  */
 export default function PortraitPromptCard({
   variant,
@@ -70,7 +69,7 @@ export default function PortraitPromptCard({
   return (
     <div className="@container relative w-full aspect-[4/5] overflow-hidden select-none rounded-lg shadow-2xl">
       <MeshBackground>
-        {/* Cyan horizon glow (behind scrim so it glows through softly) */}
+        {/* Cyan horizon glow behind the skyline */}
         <div
           aria-hidden="true"
           className="absolute left-0 right-0 bottom-0"
@@ -82,18 +81,7 @@ export default function PortraitPromptCard({
           }}
         />
 
-        {/* Dark scrim — guarantees readable type on any gradient preset */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0"
-          style={{
-            zIndex: 2,
-            background:
-              "linear-gradient(180deg, rgba(6, 4, 12, 0.62) 0%, rgba(6, 4, 12, 0.30) 34%, rgba(6, 4, 12, 0.18) 62%, rgba(6, 4, 12, 0.66) 100%)",
-          }}
-        />
-
-        {/* Islamabad skyline sitting on top of the scrim */}
+        {/* Islamabad skyline */}
         <IslamabadHorizon opacity={0.75} height="27%" />
 
         {/* Glow word just above the skyline */}
