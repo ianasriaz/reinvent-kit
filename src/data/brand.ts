@@ -12,6 +12,11 @@ export interface GradientPreset {
 export const GRADIENT_PRESETS: GradientPreset[] = [
   { id: "aurora", name: "Aurora", css: BRAND_GRADIENT },
   {
+    id: "watch-and-build",
+    name: "Watch & Build",
+    css: "linear-gradient(135deg, #A855F7 0%, #834AF6 22%, #3B61F6 48%, #2A7CF8 68%, #38D3F9 88%, #5EE0FA 100%)",
+  },
+  {
     id: "deep-space",
     name: "Deep Space",
     css: "linear-gradient(150deg, #0F1240 0%, #3B2E8C 24%, #7C3AED 50%, #2D9CDB 76%, #22D3EE 100%)",
