@@ -13,6 +13,7 @@ import {
   BRAND_GRADIENT,
   GRADIENT_PRESETS,
   GRADIENT_STORAGE_KEY,
+  PATTERN_STORAGE_KEY,
   DEFAULT_GRADIENT_ID,
 } from "./data/brand"
 import { GradientContext } from "./gradientContext"
@@ -159,6 +160,13 @@ export default function App() {
       return DEFAULT_GRADIENT_ID
     }
   })
+  const [showPattern, setShowPattern] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(PATTERN_STORAGE_KEY) !== "off"
+    } catch {
+      return true
+    }
+  })
 
   useEffect(() => {
     saveEventConfig(config)
@@ -169,6 +177,12 @@ export default function App() {
       localStorage.setItem(GRADIENT_STORAGE_KEY, gradientId)
     } catch {}
   }, [gradientId])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(PATTERN_STORAGE_KEY, showPattern ? "on" : "off")
+    } catch {}
+  }, [showPattern])
 
   const gradientCss =
     GRADIENT_PRESETS.find((p) => p.id === gradientId)?.css || BRAND_GRADIENT
@@ -308,7 +322,7 @@ export default function App() {
   }, [batch, config, exportCard, flash])
 
   return (
-    <GradientContext.Provider value={gradientCss}>
+    <GradientContext.Provider value={{ gradient: gradientCss, showPattern }}>
       <div
         style={{
           minHeight: "100vh",
@@ -475,6 +489,48 @@ export default function App() {
               {p.name}
             </button>
           ))}
+
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              marginLeft: "auto",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "10px",
+                color: "rgba(255, 255, 255, 0.45)",
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+              }}
+            >
+              Pattern:
+            </span>
+            <button
+              onClick={() => setShowPattern((v) => !v)}
+              aria-pressed={showPattern}
+              style={{
+                padding: "4px 12px",
+                borderRadius: "9999px",
+                background: showPattern
+                  ? "rgba(0, 223, 216, 0.15)"
+                  : "rgba(255, 255, 255, 0.04)",
+                border: showPattern
+                  ? `1px solid ${ACCENT}`
+                  : "1px solid rgba(255, 255, 255, 0.15)",
+                color: showPattern ? ACCENT : "rgba(255, 255, 255, 0.55)",
+                fontFamily: "var(--font-mono)",
+                fontSize: "11px",
+                cursor: "pointer",
+                transition: "all 0.15s ease",
+              }}
+            >
+              {showPattern ? "On" : "Off"}
+            </button>
+          </div>
         </div>
 
         {/* Export Action Bar */}

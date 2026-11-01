@@ -13,7 +13,10 @@ export default function MeshBackground({
   className = "",
   style = {},
 }: MeshBackgroundProps) {
-  const gradient = useContext(GradientContext)
+  const ctx = useContext(GradientContext)
+  const gradient = typeof ctx === "string" ? ctx : ctx.gradient
+  const showPattern = typeof ctx === "string" ? true : ctx.showPattern
+
   return (
     <div
       className={`relative w-full h-full overflow-hidden ${className}`}
@@ -23,18 +26,20 @@ export default function MeshBackground({
       }}
     >
       {/* Sheen layer — soft light blooms + fine silk shimmer, sits under content */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 z-[5] pointer-events-none"
-        style={{
-          background: [
-            "radial-gradient(120% 90% at 8% -6%, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 52%)",
-            "radial-gradient(90% 70% at 96% 104%, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0) 55%)",
-            "repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.045) 0px, rgba(255, 255, 255, 0.045) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 7px)",
-          ].join(", "),
-          mixBlendMode: "screen",
-        }}
-      />
+      {showPattern && (
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 z-[5] pointer-events-none"
+          style={{
+            background: [
+              "radial-gradient(120% 90% at 8% -6%, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 52%)",
+              "radial-gradient(90% 70% at 96% 104%, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0) 55%)",
+              "repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.045) 0px, rgba(255, 255, 255, 0.045) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 7px)",
+            ].join(", "),
+            mixBlendMode: "screen",
+          }}
+        />
+      )}
 
       {/* Card content */}
       <div className="relative w-full h-full z-10 flex flex-col justify-between">

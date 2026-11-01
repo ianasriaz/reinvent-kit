@@ -69,5 +69,6 @@ export const GRADIENT_PRESETS: GradientPreset[] = [
 ]
 
 export const GRADIENT_STORAGE_KEY = "reinvent-kit-gradient-v1"
+export const PATTERN_STORAGE_KEY = "reinvent-kit-pattern-v1"
 
 export const DEFAULT_GRADIENT_ID = "aurora"

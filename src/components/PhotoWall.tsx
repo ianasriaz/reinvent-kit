@@ -23,9 +23,11 @@ function StepRepeatBackground({
   )
 
   const useFallback = customLogos.length === 0
-  const tiles = useFallback
-    ? Array.from({ length: 24 }, (_, i) => i)
-    : Array.from({ length: 24 }, (_, i) => customLogos[i % customLogos.length])
+  const fallbackTiles = Array.from({ length: 24 }, (_, i) => i)
+  const logoTiles = Array.from(
+    { length: 24 },
+    (_, i) => customLogos[i % customLogos.length],
+  )
 
   return (
     <div
@@ -33,7 +35,7 @@ function StepRepeatBackground({
       style={{ opacity: 0.18 }}
     >
       {useFallback
-        ? tiles.map((i) => (
+        ? fallbackTiles.map((i) => (
             <div
               key={i}
               className="flex h-[clamp(28px,5cqi,72px)] w-auto max-w-[80%] items-center justify-center brightness-200"
@@ -41,7 +43,7 @@ function StepRepeatBackground({
               {i % 2 === 0 ? <AwsLogo size={48} /> : <AwsSbgLogo size={36} />}
             </div>
           ))
-        : tiles.map((src, i) => (
+        : logoTiles.map((src, i) => (
             <img
               key={i}
               src={src}
