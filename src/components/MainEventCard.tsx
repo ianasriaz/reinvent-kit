@@ -4,6 +4,7 @@ import AwsReinventLogo from "./AwsReinventLogo"
 import AwsLogo from "./AwsLogo"
 import AwsSbgLogo from "./AwsSbgLogo"
 import EventMeta from "./shared/EventMeta"
+import { ACCENT } from "../data/brand"
 import type { EventConfig } from "../data/eventConfig"
 
 interface MainEventCardProps {
@@ -85,26 +86,54 @@ export default function MainEventCard({
               sublineStyle={{ fontWeight: 500 }}
             />
 
-            {/* Date / Venue Pill */}
-            <div
-              className="flex w-full items-center justify-center"
-              style={{
-                padding: "clamp(7px, 1.2cqi, 12px) clamp(10px, 1.6cqi, 19px)",
-                borderRadius: "9999px",
-                border: "1.5px solid rgba(255, 255, 255, 0.85)",
-                background: "rgba(255, 255, 255, 0.1)",
-                backdropFilter: "blur(12px)",
-                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.12)",
-              }}
-            >
-              <EventMeta
-                size="lg"
-                dateRange={dateRange}
-                venue={venue}
-                note={comingSoon ? "COMING SOON!" : undefined}
-                className="w-full justify-center"
-              />
-            </div>
+            {/* Date / Venue Pill — replaced by a filled badge for the coming-soon cut */}
+            {comingSoon ? (
+              <div
+                className="flex items-center justify-center"
+                style={{
+                  padding:
+                    "clamp(9px, 1.5cqi, 14px) clamp(24px, 3.6cqi, 38px)",
+                  borderRadius: "9999px",
+                  background: ACCENT,
+                  boxShadow: "0 6px 24px rgba(0, 223, 216, 0.35)",
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "clamp(13px, 1.8cqi, 18px)",
+                    fontWeight: 700,
+                    letterSpacing: "0.18em",
+                    color: "#06040C",
+                    textTransform: "uppercase",
+                    lineHeight: 1,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  COMING SOON!
+                </span>
+              </div>
+            ) : (
+              <div
+                className="flex w-full items-center justify-center"
+                style={{
+                  padding:
+                    "clamp(7px, 1.2cqi, 12px) clamp(10px, 1.6cqi, 19px)",
+                  borderRadius: "9999px",
+                  border: "1.5px solid rgba(255, 255, 255, 0.85)",
+                  background: "rgba(255, 255, 255, 0.1)",
+                  backdropFilter: "blur(12px)",
+                  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.12)",
+                }}
+              >
+                <EventMeta
+                  size="lg"
+                  dateRange={dateRange}
+                  venue={venue}
+                  className="w-full justify-center"
+                />
+              </div>
+            )}
 
             {/* Highlights row — centered under the pill, inset from pill edges */}
             <div
