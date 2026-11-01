@@ -6,16 +6,18 @@ interface MeshBackgroundProps {
   children?: React.ReactNode
   className?: string
   style?: React.CSSProperties
+  pattern?: boolean
 }
 
 export default function MeshBackground({
   children,
   className = "",
   style = {},
+  pattern,
 }: MeshBackgroundProps) {
   const ctx = useContext(GradientContext)
   const gradient = typeof ctx === "string" ? ctx : ctx.gradient
-  const showPattern = typeof ctx === "string" ? true : ctx.showPattern
+  const showPattern = pattern ?? (typeof ctx === "string" ? true : ctx.showPattern)
 
   return (
     <div
