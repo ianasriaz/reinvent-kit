@@ -23,6 +23,7 @@ import {
   fileToDataUrl,
 } from "./utils/exportImage"
 import MainEventCard from "./components/MainEventCard"
+import MainEventConceptCard from "./components/MainEventConceptCard"
 import SpeakerCard from "./components/SpeakerCard"
 import PartnerCard from "./components/shared/PartnerCard"
 import AttendeeCard, { type Attendee } from "./components/AttendeeCard"
@@ -33,6 +34,7 @@ import TextField, { ChoiceGroup } from "./components/ui/TextField"
 const TABS = [
   { id: "Main Event", size: "1200 × 630" },
   { id: "Main Event Coming Soon", size: "1200 × 630" },
+  { id: "Main Event Concept", size: "1200 × 630" },
   { id: "Speaker", size: "1080 × 1080" },
   { id: "Sponsor", size: "1080 × 1080" },
   { id: "Community Partner", size: "1080 × 1080" },
@@ -51,6 +53,7 @@ type Tab = typeof TABS[number]["id"]
 const TAB_WIDTH: Record<Tab, number> = {
   "Main Event": 1200,
   "Main Event Coming Soon": 1200,
+  "Main Event Concept": 1200,
   Speaker: 1080,
   Sponsor: 1080,
   "Community Partner": 1080,
@@ -102,6 +105,10 @@ function cardFor(tab: Tab, config: EventConfig, onPhoto: (file: File) => void) {
           edition={config.edition}
           comingSoon
         />
+      )
+    case "Main Event Concept":
+      return (
+        <MainEventConceptCard city={config.city} edition={config.edition} />
       )
     case "Speaker":
       return (
@@ -235,7 +242,10 @@ export default function App() {
   }, [])
 
   const current = TABS.find((t) => t.id === active)!
-  const isWide = active === "Main Event" || active === "Main Event Coming Soon"
+  const isWide =
+    active === "Main Event" ||
+    active === "Main Event Coming Soon" ||
+    active === "Main Event Concept"
   const isSquare = !isWide
 
   const targetWidth = isSquare ? 1080 : 1200

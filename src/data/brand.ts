@@ -17,6 +17,11 @@ export const GRADIENT_PRESETS: GradientPreset[] = [
     css: "linear-gradient(135deg, #A855F7 0%, #834AF6 22%, #3B61F6 48%, #2A7CF8 68%, #38D3F9 88%, #5EE0FA 100%)",
   },
   {
+    id: "concept-2026",
+    name: "Concept 2026",
+    css: "linear-gradient(112deg, #A855F7 0%, #8257F6 16%, #5566F6 36%, #337FF3 58%, #26A9F1 78%, #2FD0F6 92%, #67E6FB 100%)",
+  },
+  {
     id: "deep-space",
     name: "Deep Space",
     css: "linear-gradient(150deg, #0F1240 0%, #3B2E8C 24%, #7C3AED 50%, #2D9CDB 76%, #22D3EE 100%)",
