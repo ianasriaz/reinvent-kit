@@ -10,12 +10,14 @@ interface MainEventCardProps {
   venue?: string
   dateRange?: string
   edition?: string
+  comingSoon?: boolean
 }
 
 export default function MainEventCard({
   venue = "AIR UNIVERSITY",
   dateRange = "DEC, 2026",
   edition = "2026",
+  comingSoon = false,
 }: MainEventCardProps) {
   return (
     <div className="@container relative w-full aspect-[1200/630] overflow-hidden select-none rounded-lg shadow-2xl">
@@ -42,6 +44,7 @@ export default function MainEventCard({
             </div>
 
             <div
+              className="flex items-center"
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: "clamp(10px, 1.2cqi, 13px)",
@@ -49,9 +52,21 @@ export default function MainEventCard({
                 color: "rgba(255, 255, 255, 0.85)",
                 textTransform: "uppercase",
                 fontWeight: 700,
+                gap: "clamp(5px, 0.9cqi, 9px)",
               }}
             >
-              Islamabad, Pakistan
+              {comingSoon && (
+                <svg
+                  width="clamp(12px, 1.5cqi, 16px)"
+                  height="clamp(12px, 1.5cqi, 16px)"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  style={{ flexShrink: 0, opacity: 0.95 }}
+                >
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" />
+                </svg>
+              )}
+              {comingSoon ? "Islamabad" : "Islamabad, Pakistan"}
             </div>
           </div>
 
@@ -86,6 +101,7 @@ export default function MainEventCard({
                 size="lg"
                 dateRange={dateRange}
                 venue={venue}
+                note={comingSoon ? "COMING SOON!" : undefined}
                 className="w-full justify-center"
               />
             </div>

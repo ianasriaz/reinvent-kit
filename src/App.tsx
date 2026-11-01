@@ -32,6 +32,7 @@ import TextField, { ChoiceGroup } from "./components/ui/TextField"
 
 const TABS = [
   { id: "Main Event", size: "1200 × 630" },
+  { id: "Main Event Coming Soon", size: "1200 × 630" },
   { id: "Speaker", size: "1080 × 1080" },
   { id: "Sponsor", size: "1080 × 1080" },
   { id: "Community Partner", size: "1080 × 1080" },
@@ -49,6 +50,7 @@ type Tab = typeof TABS[number]["id"]
 
 const TAB_WIDTH: Record<Tab, number> = {
   "Main Event": 1200,
+  "Main Event Coming Soon": 1200,
   Speaker: 1080,
   Sponsor: 1080,
   "Community Partner": 1080,
@@ -90,6 +92,15 @@ function cardFor(tab: Tab, config: EventConfig, onPhoto: (file: File) => void) {
           venue={config.venue}
           dateRange={config.dateRange}
           edition={config.edition}
+        />
+      )
+    case "Main Event Coming Soon":
+      return (
+        <MainEventCard
+          venue={config.venue}
+          dateRange={config.dateRange}
+          edition={config.edition}
+          comingSoon
         />
       )
     case "Speaker":
@@ -224,7 +235,8 @@ export default function App() {
   }, [])
 
   const current = TABS.find((t) => t.id === active)!
-  const isSquare = active !== "Main Event"
+  const isWide = active === "Main Event" || active === "Main Event Coming Soon"
+  const isSquare = !isWide
 
   const targetWidth = isSquare ? 1080 : 1200
 
@@ -788,7 +800,7 @@ export default function App() {
                 value={config.dateRange}
                 onChange={(v) => patch("dateRange", v)}
               />
-              {active === "Main Event" && (
+              {isWide && (
                 <TextField
                   label="Edition"
                   value={config.edition}

@@ -1,8 +1,10 @@
 import React from "react"
+import { ACCENT } from "../../data/brand"
 
 interface EventMetaProps {
   dateRange?: string
   venue?: string
+  note?: string
   size?: "lg" | "sm"
   className?: string
 }
@@ -10,6 +12,7 @@ interface EventMetaProps {
 export default function EventMeta({
   dateRange,
   venue,
+  note,
   size = "lg",
   className = "",
 }: EventMetaProps) {
@@ -65,6 +68,30 @@ export default function EventMeta({
         </svg>
         <span style={{ color: "rgba(255, 255, 255, 0.95)" }}>{venue}</span>
       </div>
+
+      {note && (
+        <>
+          <span style={{ color: "rgba(255, 255, 255, 0.4)" }}>|</span>
+          <div className="inline-flex items-center" style={{ gap }}>
+            <svg
+              width={iconSize}
+              height={iconSize}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ opacity: 0.95 }}
+            >
+              <circle cx="12" cy="12" r="9" />
+              <line x1="12" y1="7" x2="12" y2="12" />
+              <line x1="12" y1="12" x2="15.5" y2="14" />
+            </svg>
+            <span style={{ color: ACCENT }}>{note}</span>
+          </div>
+        </>
+      )}
     </div>
   )
 }
