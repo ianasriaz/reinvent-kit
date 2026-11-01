@@ -4,7 +4,6 @@ import AwsReinventLogo from "./AwsReinventLogo"
 import AwsLogo from "./AwsLogo"
 import AwsSbgLogo from "./AwsSbgLogo"
 import EventMeta from "./shared/EventMeta"
-import { ACCENT } from "../data/brand"
 import type { EventConfig } from "../data/eventConfig"
 
 interface MainEventCardProps {
@@ -89,13 +88,13 @@ export default function MainEventCard({
             {/* Date / Venue Pill — replaced by a filled badge for the coming-soon cut */}
             {comingSoon ? (
               <div
-                className="flex items-center justify-center"
+                className="flex w-full items-center justify-center"
                 style={{
                   padding:
                     "clamp(9px, 1.5cqi, 14px) clamp(24px, 3.6cqi, 38px)",
                   borderRadius: "9999px",
-                  background: ACCENT,
-                  boxShadow: "0 6px 24px rgba(0, 223, 216, 0.35)",
+                  background: "#FFFFFF",
+                  boxShadow: "0 6px 24px rgba(0, 0, 0, 0.18)",
                 }}
               >
                 <span
