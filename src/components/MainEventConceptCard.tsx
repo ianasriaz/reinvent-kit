@@ -118,34 +118,38 @@ export default function MainEventConceptCard({
           {/* Hero block — lockup, pill and chips share one optical width */}
           <div className="flex flex-1 flex-col items-center justify-center">
             <div className="inline-flex flex-col items-stretch">
-              <div className="flex flex-col items-start">
-                <span
-                  style={{
-                    fontFamily: "var(--font-brand)",
-                    fontSize: "clamp(15px, 2.9cqi, 40px)",
-                    fontWeight: 500,
-                    letterSpacing: "0.005em",
-                    lineHeight: 1,
-                    color: "#FFFFFF",
-                  }}
-                >
-                  AWS
-                </span>
-                <div
-                  className="flex items-baseline"
-                  style={{ marginTop: "clamp(2px, 0.4cqi, 6px)" }}
-                >
-                  <span
-                    style={{
-                      fontFamily: "var(--font-brand)",
-                      fontSize: "clamp(44px, 11.2cqi, 142px)",
-                      fontWeight: 500,
-                      letterSpacing: "-0.02em",
-                      lineHeight: 0.9,
-                      color: "#FFFFFF",
-                    }}
-                  >
-                    re:
+              <div>
+                <div className="flex items-baseline">
+                  <span style={{ position: "relative", display: "inline-block" }}>
+                    <span
+                      style={{
+                        position: "absolute",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        bottom: "calc(100% - 0.22em)",
+                        whiteSpace: "nowrap",
+                        fontFamily: "var(--font-brand)",
+                        fontSize: "clamp(15px, 2.9cqi, 40px)",
+                        fontWeight: 500,
+                        letterSpacing: "0.005em",
+                        lineHeight: 1,
+                        color: "#FFFFFF",
+                      }}
+                    >
+                      AWS
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: "var(--font-brand)",
+                        fontSize: "clamp(44px, 11.2cqi, 142px)",
+                        fontWeight: 500,
+                        letterSpacing: "-0.02em",
+                        lineHeight: 0.9,
+                        color: "#FFFFFF",
+                      }}
+                    >
+                      re:
+                    </span>
                   </span>
                   <span
                     style={{
