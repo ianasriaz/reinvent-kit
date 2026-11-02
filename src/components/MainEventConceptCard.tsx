@@ -1,9 +1,8 @@
-import { useContext } from "react"
-import type { CSSProperties } from "react"
+import { useContext, useLayoutEffect, useRef } from "react"
+import type { CSSProperties, RefObject } from "react"
 import MeshBackground from "./MeshBackground"
 import IslamabadHorizon from "./IslamabadHorizon"
 import AwsLogo from "./AwsLogo"
-import AwsSbgLogo from "./AwsSbgLogo"
 import { GradientContext } from "../gradientContext"
 
 interface MainEventConceptCardProps {
@@ -67,12 +66,52 @@ function SideGrid() {
   )
 }
 
+/**
+ * Scales the pill label's font-size so the text spans the pill's inner
+ * content width exactly, re-fitting whenever the pill resizes or fonts load.
+ */
+function useFitPillLabel(
+  pillRef: RefObject<HTMLDivElement | null>,
+  labelRef: RefObject<HTMLSpanElement | null>,
+  text: string,
+) {
+  useLayoutEffect(() => {
+    const pill = pillRef.current
+    const label = labelRef.current
+    if (!pill || !label) return
+    const fit = () => {
+      const cs = getComputedStyle(pill)
+      const available =
+        pill.clientWidth -
+        parseFloat(cs.paddingLeft) -
+        parseFloat(cs.paddingRight)
+      if (available <= 0) return
+      const base = 100
+      label.style.fontSize = `${base}px`
+      const w = label.getBoundingClientRect().width
+      if (w > 0) {
+        label.style.fontSize = `${((base * available) / w).toFixed(2)}px`
+      }
+    }
+    fit()
+    document.fonts.ready.then(fit).catch(() => {})
+    const ro = new ResizeObserver(fit)
+    ro.observe(pill)
+    return () => ro.disconnect()
+  }, [pillRef, labelRef, text])
+}
+
 export default function MainEventConceptCard({
   city = "Islamabad",
   edition = "2026",
 }: MainEventConceptCardProps) {
   const ctx = useContext(GradientContext)
   const showPattern = typeof ctx === "string" ? true : ctx.showPattern
+
+  const pillRef = useRef<HTMLDivElement>(null)
+  const pillLabelRef = useRef<HTMLSpanElement>(null)
+  const pillLabel = `Watch & Build Party ${edition} | ${city}`
+  useFitPillLabel(pillRef, pillLabelRef, pillLabel)
 
   return (
     <div className="@container relative w-full aspect-[1200/630] overflow-hidden select-none rounded-lg shadow-2xl">
@@ -93,13 +132,7 @@ export default function MainEventConceptCard({
         >
           {/* Header */}
           <div className="flex w-full items-center justify-between">
-            <div
-              className="flex items-center"
-              style={{ gap: "clamp(14px, 2.2cqi, 26px)" }}
-            >
-              <AwsLogo size={54} />
-              <AwsSbgLogo size={36} />
-            </div>
+            <AwsLogo size={54} />
 
             <span
               style={{
@@ -123,17 +156,17 @@ export default function MainEventConceptCard({
                   <span style={{ position: "relative", display: "inline-block" }}>
                     {/* AWS left-flush (ink-aligned) above re:, ink top aligned to
                         Invent's ink top. Tuck constants are tuned for Amazon Ember
-                        Display metrics (cap 0.703em, ascent 0.972em). */}
+                        Display Light metrics (cap 0.703em, ascent 0.972em). */}
                     <span
                       style={{
                         position: "absolute",
                         left: 0,
-                        marginLeft: "0.106em",
-                        bottom: "calc(100% - 0.087em)",
+                        marginLeft: "0.116em",
+                        bottom: "calc(100% - 0.072em)",
                         whiteSpace: "nowrap",
                         fontFamily: "var(--font-brand)",
-                        fontSize: "clamp(12px, 3.55cqi, 44px)",
-                        fontWeight: 500,
+                        fontSize: "clamp(12px, 4cqi, 47.5px)",
+                        fontWeight: 300,
                         letterSpacing: "0.005em",
                         lineHeight: 1,
                         color: "#FFFFFF",
@@ -144,8 +177,8 @@ export default function MainEventConceptCard({
                     <span
                       style={{
                         fontFamily: "var(--font-brand)",
-                        fontSize: "clamp(28px, 6cqi, 74px)",
-                        fontWeight: 500,
+                        fontSize: "clamp(28px, 6.7cqi, 80.4px)",
+                        fontWeight: 300,
                         letterSpacing: "-0.02em",
                         lineHeight: 1,
                         color: "#FFFFFF",
@@ -157,7 +190,7 @@ export default function MainEventConceptCard({
                   <span
                     style={{
                       fontFamily: "var(--font-brand)",
-                      fontSize: "clamp(44px, 11.2cqi, 142px)",
+                      fontSize: "clamp(48px, 12.5cqi, 150px)",
                       fontWeight: 500,
                       letterSpacing: "-0.02em",
                       lineHeight: 0.9,
@@ -167,27 +200,15 @@ export default function MainEventConceptCard({
                   >
                     Invent
                   </span>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-brand)",
-                      fontSize: "clamp(17px, 3.3cqi, 44px)",
-                      fontWeight: 500,
-                      letterSpacing: "0.005em",
-                      lineHeight: 1,
-                      color: "#FFFFFF",
-                      marginLeft: "clamp(8px, 1.2cqi, 16px)",
-                    }}
-                  >
-                    {edition}
-                  </span>
                 </div>
               </div>
 
-              {/* Text-only pill, flush to the lockup width */}
+              {/* Text-only pill, flush to the lockup width; label auto-fits */}
               <div
+                ref={pillRef}
                 className="flex items-center justify-center"
                 style={{
-                  width: "100%",
+                  margin: "0 -0.45cqi",
                   marginTop: "clamp(12px, 2.2cqi, 26px)",
                   padding:
                     "clamp(9px, 1.3cqi, 15px) clamp(16px, 2cqi, 26px)",
@@ -198,9 +219,9 @@ export default function MainEventConceptCard({
                 }}
               >
                 <span
+                  ref={pillLabelRef}
                   style={{
                     fontFamily: "var(--font-brand)",
-                    fontSize: "clamp(12px, 1.9cqi, 25px)",
                     fontWeight: 500,
                     letterSpacing: "0.06em",
                     lineHeight: 1,
@@ -209,7 +230,7 @@ export default function MainEventConceptCard({
                     whiteSpace: "nowrap",
                   }}
                 >
-                  Watch & Build Party {city}
+                  {pillLabel}
                 </span>
               </div>
 
