@@ -121,15 +121,18 @@ export default function MainEventConceptCard({
               <div>
                 <div className="flex items-baseline">
                   <span style={{ position: "relative", display: "inline-block" }}>
+                    {/* AWS left-flush (ink-aligned) above re:, ink top aligned to
+                        Invent's ink top. Tuck constants are tuned for Amazon Ember
+                        Display metrics (cap 0.703em, ascent 0.972em). */}
                     <span
                       style={{
                         position: "absolute",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        bottom: "calc(100% - 0.22em)",
+                        left: 0,
+                        marginLeft: "0.106em",
+                        bottom: "calc(100% - 0.087em)",
                         whiteSpace: "nowrap",
                         fontFamily: "var(--font-brand)",
-                        fontSize: "clamp(15px, 2.9cqi, 40px)",
+                        fontSize: "clamp(12px, 3.55cqi, 44px)",
                         fontWeight: 500,
                         letterSpacing: "0.005em",
                         lineHeight: 1,
@@ -141,10 +144,10 @@ export default function MainEventConceptCard({
                     <span
                       style={{
                         fontFamily: "var(--font-brand)",
-                        fontSize: "clamp(44px, 11.2cqi, 142px)",
+                        fontSize: "clamp(28px, 6cqi, 74px)",
                         fontWeight: 500,
                         letterSpacing: "-0.02em",
-                        lineHeight: 0.9,
+                        lineHeight: 1,
                         color: "#FFFFFF",
                       }}
                     >
@@ -159,6 +162,7 @@ export default function MainEventConceptCard({
                       letterSpacing: "-0.02em",
                       lineHeight: 0.9,
                       color: "#FFFFFF",
+                      marginLeft: "0.18em",
                     }}
                   >
                     Invent
