@@ -81,6 +81,8 @@ function Rail({
         right: isLeft ? undefined : 0,
         width: "12cqi",
         backgroundImage: grid,
+        borderLeft: isLeft ? undefined : "1px solid rgba(255, 255, 255, 0.22)",
+        borderRight: isLeft ? "1px solid rgba(255, 255, 255, 0.22)" : undefined,
       }}
     >
       {blocks.map((b, i) => (
