@@ -40,27 +40,21 @@ const PIN = (
 )
 
 const LEFT_BLOCKS = [
-  { row: 0, col: 0, color: "#42B4FF" },
-  { row: 6, col: 1, color: "#FF57EA" },
-  { row: 11, col: 0, color: "#FC9904" },
-  { row: 17, col: 1, color: "#01E582" },
-  { row: 22, col: 0, color: "#8C52FF" },
-  { row: 27, col: 0, color: "#42B4FF" },
-  { row: 33, col: 1, color: "#FF57EA" },
-  { row: 37, col: 0, color: "#FC9904" },
-  { row: 44, col: 0, color: "#8C52FF" },
+  { row: 1, col: 1, color: "#8C52FF" },
+  { row: 3, col: 2, color: "#01E582" },
+  { row: 5, col: 0, color: "#FC9904" },
+  { row: 7, col: 1, color: "#FF57EA" },
+  { row: 9, col: 2, color: "#42B4FF" },
+  { row: 11, col: 0, color: "#8C52FF" },
 ]
 
 const RIGHT_BLOCKS = [
-  { row: 3, col: 0, color: "#8C52FF" },
-  { row: 8, col: 1, color: "#01E582" },
-  { row: 13, col: 0, color: "#FC9904" },
-  { row: 19, col: 1, color: "#FF57EA" },
-  { row: 24, col: 0, color: "#42B4FF" },
-  { row: 30, col: 1, color: "#8C52FF" },
-  { row: 35, col: 0, color: "#01E582" },
-  { row: 41, col: 1, color: "#FC9904" },
-  { row: 46, col: 0, color: "#FF57EA" },
+  { row: 2, col: 0, color: "#42B4FF" },
+  { row: 4, col: 1, color: "#8C52FF" },
+  { row: 6, col: 2, color: "#01E582" },
+  { row: 8, col: 0, color: "#FC9904" },
+  { row: 10, col: 1, color: "#FF57EA" },
+  { row: 12, col: 2, color: "#42B4FF" },
 ]
 
 function Rail({
@@ -83,8 +77,10 @@ function Rail({
       style={{
         left: isLeft ? 0 : undefined,
         right: isLeft ? undefined : 0,
-        width: "8cqi",
+        width: "12cqi",
         backgroundImage: grid,
+        borderLeft: isLeft ? undefined : "1px solid rgba(255, 255, 255, 0.4)",
+        borderRight: isLeft ? "1px solid rgba(255, 255, 255, 0.4)" : undefined,
       }}
     >
       {blocks.map((b, i) => (
@@ -92,7 +88,7 @@ function Rail({
           key={i}
           className="absolute"
           style={{
-            top: `${b.row}cqi`,
+            top: `${b.row * 4}cqi`,
             width: "4cqi",
             height: "4cqi",
             background: b.color,
@@ -129,7 +125,7 @@ export default function MainEventConceptDarkCard({
       {/* Soft glow behind the skyline, kept inside the rails */}
       <div
         aria-hidden="true"
-        className="absolute bottom-0 left-[10cqi] right-[10cqi]"
+        className="absolute bottom-0 left-[12cqi] right-[12cqi]"
         style={{
           height: "clamp(160px, 18cqi, 216px)",
           background:
@@ -141,7 +137,7 @@ export default function MainEventConceptDarkCard({
       <Rail side="right" blocks={RIGHT_BLOCKS} />
 
       {/* Skyline contained between the rails */}
-      <div className="absolute bottom-0 left-[10cqi] right-[10cqi] z-[1]">
+      <div className="absolute bottom-0 left-[12cqi] right-[12cqi] z-[1]">
         <IslamabadHorizon
           opacity={1}
           height="clamp(160px, 18cqi, 216px)"
