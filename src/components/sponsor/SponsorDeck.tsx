@@ -174,7 +174,30 @@ function SponsorPage({
           <AwsLogo size={46} />
           <AwsSbgLogo size={34} />
         </div>
-        <AwsReinventLogo size="sm" />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 4,
+          }}
+        >
+          <AwsReinventLogo size="sm" />
+          <span
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: "0.03em",
+              color: "rgba(255, 255, 255, 0.85)",
+              textTransform: "uppercase",
+              whiteSpace: "nowrap",
+              lineHeight: 1,
+            }}
+          >
+            Watch &amp; Build Party 2026
+          </span>
+        </div>
       </div>
 
       {/* Body */}
