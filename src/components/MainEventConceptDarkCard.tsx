@@ -1,34 +1,75 @@
 import { useRef } from "react"
-import AwsLogo from "./AwsLogo"
 import IslamabadHorizon from "./IslamabadHorizon"
 import { useFitPillLabel } from "./MainEventConceptCard"
 
 interface MainEventConceptDarkCardProps {
   city?: string
   edition?: string
+  venue?: string
+  dateRange?: string
 }
 
-const HIGHLIGHTS = ["NETWORKING", "REFRESHMENT", "SWAGS"]
-
-const CHECK = (
+const CALENDAR = (
   <svg
     viewBox="0 0 24 24"
     fill="none"
-    stroke="#06040C"
-    strokeWidth="3.5"
+    stroke="currentColor"
+    strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
-    style={{ width: "60%", height: "60%" }}
+    style={{ width: "clamp(11px, 1.3cqi, 15px)", height: "clamp(11px, 1.3cqi, 15px)", flexShrink: 0 }}
   >
-    <path d="M5 13l4 4L19 7" />
+    <rect x="3" y="4" width="18" height="17" rx="2" />
+    <path d="M8 2v4M16 2v4M3 10h18" />
   </svg>
 )
 
-const BLOCK_COLORS = ["#8C52FF", "#01E582", "#FC9904", "#FF57EA", "#42B4FF"]
+const PIN = (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={{ width: "clamp(11px, 1.3cqi, 15px)", height: "clamp(11px, 1.3cqi, 15px)", flexShrink: 0 }}
+  >
+    <path d="M12 21s-7-5.3-7-11a7 7 0 0 1 14 0c0 5.7-7 11-7 11z" />
+    <circle cx="12" cy="10" r="2.5" />
+  </svg>
+)
 
-const BLOCK_ROWS = [3, 13, 23, 33, 43]
+const LEFT_BLOCKS = [
+  { row: 0, col: 0, color: "#42B4FF" },
+  { row: 6, col: 1, color: "#FF57EA" },
+  { row: 11, col: 0, color: "#FC9904" },
+  { row: 17, col: 1, color: "#01E582" },
+  { row: 22, col: 0, color: "#8C52FF" },
+  { row: 27, col: 0, color: "#42B4FF" },
+  { row: 33, col: 1, color: "#FF57EA" },
+  { row: 37, col: 0, color: "#FC9904" },
+  { row: 44, col: 0, color: "#8C52FF" },
+]
 
-function Rail({ side }: { side: "left" | "right" }) {
+const RIGHT_BLOCKS = [
+  { row: 3, col: 0, color: "#8C52FF" },
+  { row: 8, col: 1, color: "#01E582" },
+  { row: 13, col: 0, color: "#FC9904" },
+  { row: 19, col: 1, color: "#FF57EA" },
+  { row: 24, col: 0, color: "#42B4FF" },
+  { row: 30, col: 1, color: "#8C52FF" },
+  { row: 35, col: 0, color: "#01E582" },
+  { row: 41, col: 1, color: "#FC9904" },
+  { row: 46, col: 0, color: "#FF57EA" },
+]
+
+function Rail({
+  side,
+  blocks,
+}: {
+  side: "left" | "right"
+  blocks: { row: number; col: number; color: string }[]
+}) {
   const grid = [
     "repeating-linear-gradient(to right, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px 4cqi)",
     "repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px 4cqi)",
@@ -46,17 +87,17 @@ function Rail({ side }: { side: "left" | "right" }) {
         backgroundImage: grid,
       }}
     >
-      {BLOCK_ROWS.map((row, i) => (
+      {blocks.map((b, i) => (
         <div
           key={i}
           className="absolute"
           style={{
-            top: `${row}cqi`,
+            top: `${b.row}cqi`,
             width: "4cqi",
             height: "4cqi",
-            background: BLOCK_COLORS[i % BLOCK_COLORS.length],
-            left: isLeft ? 0 : undefined,
-            right: isLeft ? undefined : 0,
+            background: b.color,
+            left: isLeft ? `${b.col * 4}cqi` : undefined,
+            right: isLeft ? undefined : `${b.col * 4}cqi`,
           }}
         />
       ))}
@@ -65,12 +106,15 @@ function Rail({ side }: { side: "left" | "right" }) {
 }
 
 /**
- * Dark "rail + blocks" concept — the 5 local-community colors on grid rails
- * against pure black, with the Main Event Concept typography and copy unchanged.
+ * Dark "rail + blocks" concept — the 5 local-community colors scattered across
+ * two-column grid rails against pure black, matching the community-branding
+ * reference layout (lockup, pill, date/venue meta, contained skyline).
  */
 export default function MainEventConceptDarkCard({
   city = "Islamabad",
   edition = "2026",
+  venue = "AIR UNIVERSITY, MAIN CAMPUS",
+  dateRange = "DECEMBER, 2026",
 }: MainEventConceptDarkCardProps) {
   const pillRef = useRef<HTMLDivElement>(null)
   const pillLabelRef = useRef<HTMLSpanElement>(null)
@@ -85,52 +129,36 @@ export default function MainEventConceptDarkCard({
       {/* Soft glow behind the skyline, kept inside the rails */}
       <div
         aria-hidden="true"
-        className="absolute bottom-0 left-[8cqi] right-[8cqi]"
+        className="absolute bottom-0 left-[10cqi] right-[10cqi]"
         style={{
-          height: "clamp(140px, 18cqi, 210px)",
+          height: "clamp(160px, 18cqi, 216px)",
           background:
-            "radial-gradient(60% 90% at 50% 100%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 62%)",
+            "radial-gradient(55% 85% at 50% 100%, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 62%)",
         }}
       />
 
-      <Rail side="left" />
-      <Rail side="right" />
+      <Rail side="left" blocks={LEFT_BLOCKS} />
+      <Rail side="right" blocks={RIGHT_BLOCKS} />
 
       {/* Skyline contained between the rails */}
-      <div className="absolute bottom-0 left-[8cqi] right-[8cqi] z-[1]">
+      <div className="absolute bottom-0 left-[10cqi] right-[10cqi] z-[1]">
         <IslamabadHorizon
-          opacity={0.92}
-          height="clamp(118px, 14cqi, 172px)"
-          objectFit="contain"
+          opacity={1}
+          height="clamp(160px, 18cqi, 216px)"
+          objectFit="cover"
         />
       </div>
 
       <div
-        className="relative z-10 flex h-full w-full flex-col"
+        className="relative z-10 flex h-full w-full flex-col items-center"
         style={{
           padding: "clamp(26px, 4.4cqi, 48px) clamp(36px, 5.8cqi, 68px)",
         }}
       >
-        {/* Header */}
-        <div className="flex w-full items-center justify-between">
-          <AwsLogo size={54} />
-
-          <span
-            style={{
-              fontFamily: "var(--font-brand)",
-              fontSize: "clamp(9px, 1.15cqi, 13px)",
-              fontWeight: 500,
-              letterSpacing: "0.16em",
-              color: "rgba(255, 255, 255, 0.85)",
-              textTransform: "uppercase",
-            }}
-          >
-            Islamabad, Pakistan
-          </span>
-        </div>
-
-        {/* Hero block */}
-        <div className="flex flex-1 flex-col items-center justify-center">
+        <div
+          className="flex flex-col items-center"
+          style={{ marginTop: "clamp(24px, 4cqi, 48px)" }}
+        >
           <div className="inline-flex flex-col items-stretch">
             <div>
               <div className="flex items-baseline">
@@ -181,7 +209,7 @@ export default function MainEventConceptDarkCard({
               </div>
             </div>
 
-            {/* Glass pill, spanning the lockup */}
+            {/* Outline pill, spanning the lockup */}
             <div
               ref={pillRef}
               className="flex items-center justify-center"
@@ -191,8 +219,8 @@ export default function MainEventConceptDarkCard({
                 padding:
                   "clamp(9px, 1.3cqi, 15px) clamp(16px, 2cqi, 26px)",
                 borderRadius: "9999px",
-                border: "1.5px solid rgba(255, 255, 255, 0.85)",
-                background: "rgba(255, 255, 255, 0.08)",
+                border: "2px solid rgba(255, 255, 255, 0.85)",
+                background: "rgba(255, 255, 255, 0.06)",
                 backdropFilter: "blur(10px)",
               }}
             >
@@ -211,55 +239,30 @@ export default function MainEventConceptDarkCard({
                 {pillLabel}
               </span>
             </div>
+          </div>
 
-            {/* Highlights */}
-            <div
-              className="flex items-center justify-center"
-              style={{
-                gap: "clamp(22px, 3.4cqi, 40px)",
-                marginTop: "clamp(9px, 1.5cqi, 16px)",
-              }}
-            >
-              {HIGHLIGHTS.map((label) => (
-                <div
-                  key={label}
-                  className="flex items-center"
-                  style={{ gap: "clamp(5px, 0.75cqi, 9px)" }}
-                >
-                  <span
-                    className="flex items-center justify-center"
-                    style={{
-                      width: "clamp(10px, 1.45cqi, 15px)",
-                      height: "clamp(10px, 1.45cqi, 15px)",
-                      borderRadius: "9999px",
-                      background: "rgba(255, 255, 255, 0.55)",
-                      flexShrink: 0,
-                    }}
-                  >
-                    {CHECK}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-brand)",
-                      fontSize: "clamp(8px, 1.05cqi, 13px)",
-                      fontWeight: 500,
-                      letterSpacing: "0.12em",
-                      color: "rgba(255, 255, 255, 0.92)",
-                      textTransform: "uppercase",
-                      lineHeight: 1,
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {label}
-                  </span>
-                </div>
-              ))}
-            </div>
+          {/* Date + venue meta row, centered independently */}
+          <div
+            className="flex items-center"
+            style={{
+              marginTop: "clamp(12px, 1.8cqi, 22px)",
+              gap: "clamp(8px, 1.1cqi, 13px)",
+              fontFamily: "var(--font-brand)",
+              fontSize: "clamp(10px, 1.3cqi, 16px)",
+              fontWeight: 500,
+              letterSpacing: "0.06em",
+              color: "rgba(255, 255, 255, 0.62)",
+              textTransform: "uppercase",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {CALENDAR}
+            <span>{dateRange}</span>
+            <span style={{ opacity: 0.45 }}>|</span>
+            {PIN}
+            <span>{venue}</span>
           </div>
         </div>
-
-        {/* Space reserved for the skyline */}
-        <div style={{ height: "clamp(130px, 15.5cqi, 188px)" }} />
       </div>
     </div>
   )

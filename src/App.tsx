@@ -118,6 +118,8 @@ function cardFor(tab: Tab, config: EventConfig, onPhoto: (file: File) => void) {
         <MainEventConceptDarkCard
           city={config.city}
           edition={config.edition}
+          venue={config.venue}
+          dateRange={config.dateRange}
         />
       )
     case "Speaker":

@@ -69,9 +69,9 @@ export const SPEAKER_PRESETS: SpeakerData[] = [
 ]
 
 export const defaultEventConfig: EventConfig = {
-  venue: "AIR UNIVERSITY",
+  venue: "AIR UNIVERSITY, MAIN CAMPUS",
   city: "Islamabad",
-  dateRange: "DEC, 2026",
+  dateRange: "DECEMBER, 2026",
   edition: "2026",
   speaker: SPEAKER_PRESETS[0],
   sponsor: { name: "TechVentures Pakistan", tier: "Gold" },
