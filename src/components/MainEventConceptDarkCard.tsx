@@ -26,32 +26,12 @@ const CHECK = (
 
 const BLOCK_COLORS = ["#8C52FF", "#01E582", "#FC9904", "#FF57EA", "#42B4FF"]
 
-const LEFT_BLOCKS = [
-  { row: 2, col: 1 },
-  { row: 8, col: 0 },
-  { row: 14, col: 1 },
-  { row: 20, col: 0 },
-  { row: 26, col: 1 },
-]
+const BLOCK_ROWS = [3, 13, 23, 33, 43]
 
-const RIGHT_BLOCKS = [
-  { row: 5, col: 0 },
-  { row: 11, col: 1 },
-  { row: 17, col: 0 },
-  { row: 23, col: 1 },
-  { row: 29, col: 0 },
-]
-
-function Rail({
-  side,
-  blocks,
-}: {
-  side: "left" | "right"
-  blocks: { row: number; col: number }[]
-}) {
+function Rail({ side }: { side: "left" | "right" }) {
   const grid = [
-    "repeating-linear-gradient(to right, rgba(255, 255, 255, 0.18) 0 1px, transparent 1px 4cqi)",
-    "repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.18) 0 1px, transparent 1px 4cqi)",
+    "repeating-linear-gradient(to right, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px 4cqi)",
+    "repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px 4cqi)",
   ].join(", ")
   const isLeft = side === "left"
 
@@ -66,17 +46,17 @@ function Rail({
         backgroundImage: grid,
       }}
     >
-      {blocks.map((b, i) => (
+      {BLOCK_ROWS.map((row, i) => (
         <div
           key={i}
           className="absolute"
           style={{
-            top: `${b.row}cqi`,
+            top: `${row}cqi`,
             width: "4cqi",
             height: "4cqi",
             background: BLOCK_COLORS[i % BLOCK_COLORS.length],
-            left: isLeft ? `${b.col}cqi` : undefined,
-            right: isLeft ? undefined : `${b.col}cqi`,
+            left: isLeft ? 0 : undefined,
+            right: isLeft ? undefined : 0,
           }}
         />
       ))}
@@ -102,24 +82,28 @@ export default function MainEventConceptDarkCard({
       {/* Pure black base */}
       <div aria-hidden="true" className="absolute inset-0" style={{ background: "#000000" }} />
 
-      {/* Soft glow behind the skyline */}
+      {/* Soft glow behind the skyline, kept inside the rails */}
       <div
         aria-hidden="true"
-        className="absolute inset-0"
+        className="absolute bottom-0 left-[8cqi] right-[8cqi]"
         style={{
+          height: "clamp(140px, 18cqi, 210px)",
           background:
-            "radial-gradient(70% 46% at 50% 100%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 60%)",
+            "radial-gradient(60% 90% at 50% 100%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 62%)",
         }}
       />
 
-      <Rail side="left" blocks={LEFT_BLOCKS} />
-      <Rail side="right" blocks={RIGHT_BLOCKS} />
+      <Rail side="left" />
+      <Rail side="right" />
 
-      <IslamabadHorizon
-        opacity={0.92}
-        height="clamp(118px, 14cqi, 172px)"
-        objectFit="cover"
-      />
+      {/* Skyline contained between the rails */}
+      <div className="absolute bottom-0 left-[8cqi] right-[8cqi] z-[1]">
+        <IslamabadHorizon
+          opacity={0.92}
+          height="clamp(118px, 14cqi, 172px)"
+          objectFit="contain"
+        />
+      </div>
 
       <div
         className="relative z-10 flex h-full w-full flex-col"
