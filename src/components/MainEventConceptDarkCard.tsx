@@ -66,11 +66,15 @@ function Rail({
   side: "left" | "right"
   blocks: { row: number; col: number; color: string }[]
 }) {
+  const isLeft = side === "left"
+  const edgeLine = isLeft
+    ? "linear-gradient(to right, transparent calc(12cqi - 1px), rgba(255, 255, 255, 0.22) calc(12cqi - 1px) 12cqi)"
+    : "linear-gradient(to right, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px)"
   const grid = [
     "repeating-linear-gradient(to right, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px 4cqi)",
     "repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px 4cqi)",
+    edgeLine,
   ].join(", ")
-  const isLeft = side === "left"
 
   return (
     <div
@@ -81,8 +85,6 @@ function Rail({
         right: isLeft ? undefined : 0,
         width: "12cqi",
         backgroundImage: grid,
-        borderLeft: isLeft ? undefined : "1px solid rgba(255, 255, 255, 0.22)",
-        borderRight: isLeft ? "1px solid rgba(255, 255, 255, 0.22)" : undefined,
       }}
     >
       {blocks.map((b, i) => (
