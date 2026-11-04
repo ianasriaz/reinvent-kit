@@ -40,21 +40,23 @@ const PIN = (
 )
 
 const LEFT_BLOCKS = [
-  { row: 1, col: 1, color: "#8C52FF" },
-  { row: 3, col: 2, color: "#01E582" },
-  { row: 5, col: 0, color: "#FC9904" },
-  { row: 7, col: 1, color: "#FF57EA" },
-  { row: 9, col: 2, color: "#42B4FF" },
-  { row: 11, col: 0, color: "#8C52FF" },
+  { row: 12, col: 2, color: "#42B4FF" },
+  { row: 10, col: 1, color: "#FF57EA" },
+  { row: 8, col: 0, color: "#FC9904" },
+  { row: 6, col: 2, color: "#01E582" },
+  { row: 4, col: 1, color: "#8C52FF" },
+  { row: 2, col: 0, color: "#42B4FF" },
+  { row: 0, col: 2, color: "#FF57EA" },
 ]
 
 const RIGHT_BLOCKS = [
-  { row: 2, col: 0, color: "#42B4FF" },
-  { row: 4, col: 1, color: "#8C52FF" },
-  { row: 6, col: 2, color: "#01E582" },
-  { row: 8, col: 0, color: "#FC9904" },
-  { row: 10, col: 1, color: "#FF57EA" },
-  { row: 12, col: 2, color: "#42B4FF" },
+  { row: 0, col: 0, color: "#8C52FF" },
+  { row: 2, col: 1, color: "#01E582" },
+  { row: 4, col: 2, color: "#FC9904" },
+  { row: 6, col: 0, color: "#FF57EA" },
+  { row: 8, col: 1, color: "#42B4FF" },
+  { row: 10, col: 2, color: "#8C52FF" },
+  { row: 12, col: 0, color: "#01E582" },
 ]
 
 function Rail({
@@ -79,8 +81,6 @@ function Rail({
         right: isLeft ? undefined : 0,
         width: "12cqi",
         backgroundImage: grid,
-        borderLeft: isLeft ? undefined : "1px solid rgba(255, 255, 255, 0.4)",
-        borderRight: isLeft ? "1px solid rgba(255, 255, 255, 0.4)" : undefined,
       }}
     >
       {blocks.map((b, i) => (
