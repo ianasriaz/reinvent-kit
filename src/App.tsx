@@ -24,6 +24,7 @@ import {
 } from "./utils/exportImage"
 import MainEventCard from "./components/MainEventCard"
 import MainEventConceptCard from "./components/MainEventConceptCard"
+import MainEventConceptDarkCard from "./components/MainEventConceptDarkCard"
 import SpeakerCard from "./components/SpeakerCard"
 import PartnerCard from "./components/shared/PartnerCard"
 import AttendeeCard, { type Attendee } from "./components/AttendeeCard"
@@ -35,6 +36,7 @@ const TABS = [
   { id: "Main Event", size: "1200 × 630" },
   { id: "Main Event Coming Soon", size: "1200 × 630" },
   { id: "Main Event Concept", size: "1200 × 630" },
+  { id: "Main Event Concept Dark", size: "1200 × 630" },
   { id: "Speaker", size: "1080 × 1080" },
   { id: "Sponsor", size: "1080 × 1080" },
   { id: "Community Partner", size: "1080 × 1080" },
@@ -54,6 +56,7 @@ const TAB_WIDTH: Record<Tab, number> = {
   "Main Event": 1200,
   "Main Event Coming Soon": 1200,
   "Main Event Concept": 1200,
+  "Main Event Concept Dark": 1200,
   Speaker: 1080,
   Sponsor: 1080,
   "Community Partner": 1080,
@@ -109,6 +112,13 @@ function cardFor(tab: Tab, config: EventConfig, onPhoto: (file: File) => void) {
     case "Main Event Concept":
       return (
         <MainEventConceptCard city={config.city} edition={config.edition} />
+      )
+    case "Main Event Concept Dark":
+      return (
+        <MainEventConceptDarkCard
+          city={config.city}
+          edition={config.edition}
+        />
       )
     case "Speaker":
       return (
@@ -245,7 +255,8 @@ export default function App() {
   const isWide =
     active === "Main Event" ||
     active === "Main Event Coming Soon" ||
-    active === "Main Event Concept"
+    active === "Main Event Concept" ||
+    active === "Main Event Concept Dark"
   const isSquare = !isWide
 
   const targetWidth = isSquare ? 1080 : 1200

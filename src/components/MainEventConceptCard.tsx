@@ -70,7 +70,7 @@ function SideGrid() {
  * Scales the pill label's font-size so the text spans the pill's inner
  * content width exactly, re-fitting whenever the pill resizes or fonts load.
  */
-function useFitPillLabel(
+export function useFitPillLabel(
   pillRef: RefObject<HTMLDivElement | null>,
   labelRef: RefObject<HTMLSpanElement | null>,
   text: string,
