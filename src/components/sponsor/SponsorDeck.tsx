@@ -273,10 +273,7 @@ function CoverPage() {
               color: ACCENT,
             }}
           >
-            Sponsorship Proposal
-          </div>
-          <div style={{ marginTop: 6, fontSize: 13, letterSpacing: "0.06em", color: DIM }}>
-            AWS re:Invent 2026 · Islamabad Edition
+            Industry Partner Proposal
           </div>
         </div>
       </div>
