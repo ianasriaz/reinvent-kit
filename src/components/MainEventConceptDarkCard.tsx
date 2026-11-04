@@ -14,7 +14,7 @@ const CHECK = (
   <svg
     viewBox="0 0 24 24"
     fill="none"
-    stroke="#00DFD8"
+    stroke="#06040C"
     strokeWidth="3.5"
     strokeLinecap="round"
     strokeLinejoin="round"
@@ -24,11 +24,69 @@ const CHECK = (
   </svg>
 )
 
-const ACCENT = "rgba(0, 223, 216, 0.65)"
+const BLOCK_COLORS = ["#8C52FF", "#01E582", "#FC9904", "#FF57EA", "#42B4FF"]
+
+const LEFT_BLOCKS = [
+  { row: 2, col: 1 },
+  { row: 8, col: 0 },
+  { row: 14, col: 1 },
+  { row: 20, col: 0 },
+  { row: 26, col: 1 },
+]
+
+const RIGHT_BLOCKS = [
+  { row: 5, col: 0 },
+  { row: 11, col: 1 },
+  { row: 17, col: 0 },
+  { row: 23, col: 1 },
+  { row: 29, col: 0 },
+]
+
+function Rail({
+  side,
+  blocks,
+}: {
+  side: "left" | "right"
+  blocks: { row: number; col: number }[]
+}) {
+  const grid = [
+    "repeating-linear-gradient(to right, rgba(255, 255, 255, 0.18) 0 1px, transparent 1px 4cqi)",
+    "repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.18) 0 1px, transparent 1px 4cqi)",
+  ].join(", ")
+  const isLeft = side === "left"
+
+  return (
+    <div
+      aria-hidden="true"
+      className="absolute top-0 bottom-0 z-0 pointer-events-none"
+      style={{
+        left: isLeft ? 0 : undefined,
+        right: isLeft ? undefined : 0,
+        width: "8cqi",
+        backgroundImage: grid,
+      }}
+    >
+      {blocks.map((b, i) => (
+        <div
+          key={i}
+          className="absolute"
+          style={{
+            top: `${b.row}cqi`,
+            width: "4cqi",
+            height: "4cqi",
+            background: BLOCK_COLORS[i % BLOCK_COLORS.length],
+            left: isLeft ? `${b.col}cqi` : undefined,
+            right: isLeft ? undefined : `${b.col}cqi`,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
 
 /**
- * Experimental dark "grid" concept — charcoal base, blueprint grid, Heavy hero.
- * Self-contained by design: ignores the app gradient/pattern switcher.
+ * Dark "rail + blocks" concept — the 5 local-community colors on grid rails
+ * against pure black, with the Main Event Concept typography and copy unchanged.
  */
 export default function MainEventConceptDarkCard({
   city = "Islamabad",
@@ -39,75 +97,28 @@ export default function MainEventConceptDarkCard({
   const pillLabel = `Watch & Build Party ${edition} | ${city}`
   useFitPillLabel(pillRef, pillLabelRef, pillLabel)
 
-  const gridLayers = [
-    "repeating-linear-gradient(to right, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 4cqi)",
-    "repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 4cqi)",
-    "repeating-linear-gradient(to right, rgba(255, 255, 255, 0.11) 0 1px, transparent 1px 16cqi)",
-    "repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.11) 0 1px, transparent 1px 16cqi)",
-  ].join(", ")
-  const gridMask =
-    "radial-gradient(115% 115% at 50% 42%, rgba(0, 0, 0, 1) 52%, rgba(0, 0, 0, 0.3) 100%)"
-  const crosshairTile =
-    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cpath d='M80 72v16M72 80h16' stroke='rgba(255,255,255,0.4)' stroke-width='1.5'/%3E%3C/svg%3E\")"
-
   return (
     <div className="@container relative w-full aspect-[1200/630] overflow-hidden select-none rounded-lg shadow-2xl">
-      {/* Charcoal base + depth glows */}
+      {/* Pure black base */}
+      <div aria-hidden="true" className="absolute inset-0" style={{ background: "#000000" }} />
+
+      {/* Soft glow behind the skyline */}
       <div
         aria-hidden="true"
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, #16161A 0%, #0B0B0E 55%, #070709 100%)",
+            "radial-gradient(70% 46% at 50% 100%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 60%)",
         }}
       />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{
-          background: [
-            "radial-gradient(90% 65% at 50% -5%, rgba(165, 175, 195, 0.13) 0%, rgba(0, 0, 0, 0) 60%)",
-            "radial-gradient(75% 55% at 50% 108%, rgba(0, 223, 216, 0.09) 0%, rgba(0, 0, 0, 0) 55%)",
-          ].join(", "),
-        }}
-      />
+
+      <Rail side="left" blocks={LEFT_BLOCKS} />
+      <Rail side="right" blocks={RIGHT_BLOCKS} />
 
       <IslamabadHorizon
-        opacity={0.3}
+        opacity={0.92}
         height="clamp(118px, 14cqi, 172px)"
         objectFit="cover"
-      />
-
-      {/* Cyan horizon line at the skyline base */}
-      <div
-        aria-hidden="true"
-        className="absolute bottom-0 left-0 right-0 z-[3] pointer-events-none"
-        style={{
-          height: "2px",
-          background: `linear-gradient(to right, rgba(0, 223, 216, 0) 0%, ${ACCENT} 18%, ${ACCENT} 82%, rgba(0, 223, 216, 0) 100%)`,
-        }}
-      />
-
-      {/* Blueprint grid + crosshair ticks */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 z-[2] pointer-events-none"
-        style={{
-          backgroundImage: gridLayers,
-          maskImage: gridMask,
-          WebkitMaskImage: gridMask,
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 z-[2] pointer-events-none"
-        style={{
-          backgroundImage: crosshairTile,
-          backgroundSize: "16cqi 16cqi",
-          backgroundPosition: "-8cqi -8cqi",
-          maskImage: gridMask,
-          WebkitMaskImage: gridMask,
-        }}
       />
 
       <div
@@ -122,11 +133,11 @@ export default function MainEventConceptDarkCard({
 
           <span
             style={{
-              fontFamily: "var(--font-mono)",
+              fontFamily: "var(--font-brand)",
               fontSize: "clamp(9px, 1.15cqi, 13px)",
-              fontWeight: 400,
-              letterSpacing: "0.18em",
-              color: "rgba(255, 255, 255, 0.65)",
+              fontWeight: 500,
+              letterSpacing: "0.16em",
+              color: "rgba(255, 255, 255, 0.85)",
               textTransform: "uppercase",
             }}
           >
@@ -174,7 +185,7 @@ export default function MainEventConceptDarkCard({
                   style={{
                     fontFamily: "var(--font-brand)",
                     fontSize: "clamp(48px, 12.5cqi, 150px)",
-                    fontWeight: 700,
+                    fontWeight: 500,
                     letterSpacing: "-0.02em",
                     lineHeight: 0.9,
                     color: "#FFFFFF",
@@ -186,7 +197,7 @@ export default function MainEventConceptDarkCard({
               </div>
             </div>
 
-            {/* Flat bordered pill, spanning the lockup */}
+            {/* Glass pill, spanning the lockup */}
             <div
               ref={pillRef}
               className="flex items-center justify-center"
@@ -195,9 +206,10 @@ export default function MainEventConceptDarkCard({
                 marginTop: "clamp(12px, 2.2cqi, 26px)",
                 padding:
                   "clamp(9px, 1.3cqi, 15px) clamp(16px, 2cqi, 26px)",
-                borderRadius: "10px",
-                border: `1px solid ${ACCENT}`,
-                background: "rgba(10, 10, 13, 0.85)",
+                borderRadius: "9999px",
+                border: "1.5px solid rgba(255, 255, 255, 0.85)",
+                background: "rgba(255, 255, 255, 0.08)",
+                backdropFilter: "blur(10px)",
               }}
             >
               <span
@@ -235,8 +247,8 @@ export default function MainEventConceptDarkCard({
                     style={{
                       width: "clamp(10px, 1.45cqi, 15px)",
                       height: "clamp(10px, 1.45cqi, 15px)",
-                      borderRadius: "3px",
-                      border: "1px solid rgba(255, 255, 255, 0.5)",
+                      borderRadius: "9999px",
+                      background: "rgba(255, 255, 255, 0.55)",
                       flexShrink: 0,
                     }}
                   >
@@ -244,11 +256,11 @@ export default function MainEventConceptDarkCard({
                   </span>
                   <span
                     style={{
-                      fontFamily: "var(--font-mono)",
+                      fontFamily: "var(--font-brand)",
                       fontSize: "clamp(8px, 1.05cqi, 13px)",
-                      fontWeight: 400,
-                      letterSpacing: "0.14em",
-                      color: "rgba(255, 255, 255, 0.88)",
+                      fontWeight: 500,
+                      letterSpacing: "0.12em",
+                      color: "rgba(255, 255, 255, 0.92)",
                       textTransform: "uppercase",
                       lineHeight: 1,
                       whiteSpace: "nowrap",
