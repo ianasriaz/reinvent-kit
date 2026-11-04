@@ -394,7 +394,7 @@ function WaysPage() {
     <SponsorPage>
       <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
         <AccentRule />
-        <Title>Ways to Collaborate</Title>
+        <Title>Ways to Become Industry Partner</Title>
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           {items.map((it) => (
             <div
@@ -430,16 +430,15 @@ function IncludedPage() {
     { t: "AWS re:Invent Swags", d: "Official event swag kit for your team." },
     { t: "Refreshment", d: "Complimentary food & beverages for your team throughout the event." },
     { t: "Event Access", d: "Reserved entry to all sessions, activities, and the networking floor." },
-    { t: "Community Acknowledgement", d: "A named thank-you across our community channels." },
   ]
   return (
     <SponsorPage>
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <AccentRule />
-        <Title>What Every Path Includes</Title>
+        <Title>Event Day Perks for All Industry Partners</Title>
         <Lead>
           Whichever way you join us, your organization and team are recognized
-          as official community partners.
+          as official industry partners.
         </Lead>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {items.map((it) => (
@@ -529,9 +528,10 @@ function InKindTechPage() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <Card title="In-kind Support">
-            Contribute food, swags, or any product. In-kind partners receive the
-            full recognition baseline — shields, community acknowledgement, and
-            event access — plus a dedicated thank-you on event day.
+            Contribute food, swags, or any product. In-kind partners receive a
+            dedicated standee to promote their brand, visibility across event
+            backdrops, and mentions across social posts — alongside the full
+            recognition baseline of shields and event access.
           </Card>
           <Card title="Technical Session">
             Bring experts from your organization to deliver a technical session.
