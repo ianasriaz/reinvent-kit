@@ -110,8 +110,9 @@ function AboutEventPage() {
         <AccentRule />
         <Title>About the Event</Title>
         <Lead>
-          AWS re:Invent Watch &amp; Build Party is an official AWS community
-          event, held alongside AWS re:Invent 2026.
+          AWS re:Invent Watch &amp; Build Party is one of 44 global
+          gatherings happening in major cities to bring AWS re:Invent 2026
+          Las Vegas to local communities.
         </Lead>
         <P>
           The Islamabad edition brings the global moment home with a full day of
@@ -210,19 +211,19 @@ function SessionTypesPage() {
     {
       n: "01",
       t: "Technical Session",
-      meta: "30-40 min + Q&A",
+      meta: "20-30 min",
       d: "An advanced deep dive on AWS, AI, or emerging technology. AWS topics are prioritized.",
     },
     {
       n: "02",
       t: "Product Demo",
-      meta: "25-35 min",
+      meta: "30-40 min",
       d: "Walk through a real product or workload built on AWS services. Show it working, not just slides.",
     },
     {
       n: "03",
       t: "Panel Talk",
-      meta: "40-45 min",
+      meta: "40-50 min",
       d: "Three to four experts and a moderator on the current AI era, the job market, and student opportunities.",
     },
   ]
@@ -265,7 +266,7 @@ function SessionTypesPage() {
 
 function TopicsPage() {
   const groups = [
-    { t: "AWS Core", d: "Serverless, DevOps, data, security, and networking.", accent: true },
+    { t: "AWS Core", d: "Serverless, DevOps, data, security, networking, scalability, and AWS cost optimization.", accent: true },
     { t: "AI & ML", d: "Generative AI with Amazon Bedrock, SageMaker, and LLM applications." },
     { t: "Emerging Tech", d: "Edge, IoT, and quantum workloads on AWS services." },
     { t: "Careers", d: "Cloud careers, certifications, and the current job market." },
