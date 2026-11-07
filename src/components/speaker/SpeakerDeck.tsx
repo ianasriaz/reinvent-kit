@@ -339,10 +339,7 @@ function ApplyPage() {
       <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
         <AccentRule />
         <Title>Apply to Speak</Title>
-        <P>
-          Email your session title, preferred format, and a short outline. The
-          organizing team will follow up with next steps.
-        </P>
+        <P>For more details and discussion, contact the organizing team.</P>
         <div
           style={{
             borderRadius: 14,
