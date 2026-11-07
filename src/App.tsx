@@ -26,6 +26,7 @@ import MainEventCard from "./components/MainEventCard"
 import MainEventConceptCard from "./components/MainEventConceptCard"
 import MainEventConceptDarkCard from "./components/MainEventConceptDarkCard"
 import SponsorDeck from "./components/sponsor/SponsorDeck"
+import SpeakerDeck from "./components/speaker/SpeakerDeck"
 import SpeakerCard from "./components/SpeakerCard"
 import PartnerCard from "./components/shared/PartnerCard"
 import AttendeeCard, { type Attendee } from "./components/AttendeeCard"
@@ -39,6 +40,7 @@ const TABS = [
   { id: "Main Event Concept", size: "1200 × 630" },
   { id: "Main Event Concept Dark", size: "1200 × 630" },
   { id: "Sponsor Deck", size: "A4 PDF" },
+  { id: "Speaker Deck", size: "A4 PDF" },
   { id: "Speaker", size: "1080 × 1080" },
   { id: "Sponsor", size: "1080 × 1080" },
   { id: "Community Partner", size: "1080 × 1080" },
@@ -60,6 +62,7 @@ const TAB_WIDTH: Record<Tab, number> = {
   "Main Event Concept": 1200,
   "Main Event Concept Dark": 1200,
   "Sponsor Deck": 794,
+  "Speaker Deck": 794,
   Speaker: 1080,
   Sponsor: 1080,
   "Community Partner": 1080,
@@ -127,6 +130,8 @@ function cardFor(tab: Tab, config: EventConfig, onPhoto: (file: File) => void) {
       )
     case "Sponsor Deck":
       return <SponsorDeck />
+    case "Speaker Deck":
+      return <SpeakerDeck />
     case "Speaker":
       return (
         <SpeakerCard
@@ -264,9 +269,10 @@ export default function App() {
     active === "Main Event Coming Soon" ||
     active === "Main Event Concept" ||
     active === "Main Event Concept Dark" ||
-    active === "Sponsor Deck"
+    active === "Sponsor Deck" ||
+    active === "Speaker Deck"
   const isSquare = !isWide
-  const isDeck = active === "Sponsor Deck"
+  const isDeck = active === "Sponsor Deck" || active === "Speaker Deck"
 
   const targetWidth = isSquare ? 1080 : 1200
 
@@ -325,7 +331,7 @@ export default function App() {
   const handleExportAll = () => {
     const items: BatchItem[] = []
     for (const scale of [1, 2] as const) {
-      for (const tab of TABS.map((t) => t.id).filter((id) => id !== "Sponsor Deck")) {
+      for (const tab of TABS.map((t) => t.id).filter((id) => id !== "Sponsor Deck" && id !== "Speaker Deck")) {
         items.push({ tab, scale })
       }
     }

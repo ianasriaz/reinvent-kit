@@ -2,7 +2,7 @@ import skylineUrl from "../assets/Islamabad Landmark Footer.png"
 
 interface IslamabadHorizonProps {
   opacity?: number
-  height?: string
+  height?: string | number
   objectFit?: "cover" | "contain" | "fill"
   className?: string
 }

@@ -1,221 +1,23 @@
 import { useRef, useState } from "react"
-import type { ReactNode } from "react"
 import { jsPDF } from "jspdf"
 import { toPng } from "html-to-image"
-import AwsLogo from "../AwsLogo"
-import AwsSbgLogo from "../AwsSbgLogo"
-import AwsReinventLogo from "../AwsReinventLogo"
-import IslamabadHorizon from "../IslamabadHorizon"
-import { BRAND_GRADIENT, ACCENT } from "../../data/brand"
+import { ACCENT } from "../../data/brand"
 import { prepareRenderer } from "../../utils/exportImage"
-
-const PAGE_W = 794
-const PAGE_H = 1123
-
-const MUTED = "rgba(255, 255, 255, 0.72)"
-const DIM = "rgba(255, 255, 255, 0.55)"
-
-function Title({ children }: { children: ReactNode }) {
-  return (
-    <h1
-      style={{
-        fontSize: 40,
-        fontWeight: 700,
-        letterSpacing: "-0.02em",
-        lineHeight: 1.05,
-        color: "#FFFFFF",
-      }}
-    >
-      {children}
-    </h1>
-  )
-}
-
-function Lead({ children }: { children: ReactNode }) {
-  return (
-    <p style={{ fontSize: 17, fontWeight: 500, lineHeight: 1.5, color: "#FFFFFF" }}>
-      {children}
-    </p>
-  )
-}
-
-function P({ children }: { children: ReactNode }) {
-  return (
-    <p style={{ fontSize: 15, fontWeight: 400, lineHeight: 1.62, color: MUTED }}>
-      {children}
-    </p>
-  )
-}
-
-function AccentRule() {
-  return (
-    <div
-      style={{
-        width: 56,
-        height: 4,
-        borderRadius: 2,
-        background: `linear-gradient(to right, ${ACCENT}, #2EA8F0)`,
-      }}
-    />
-  )
-}
-
-function Card({
-  title,
-  children,
-  accent = false,
-}: {
-  title?: ReactNode
-  children?: ReactNode
-  accent?: boolean
-}) {
-  return (
-    <div
-      style={{
-        borderRadius: 14,
-        border: accent
-          ? `1.5px solid ${ACCENT}`
-          : "1.5px solid rgba(255, 255, 255, 0.16)",
-        background: "rgba(255, 255, 255, 0.04)",
-        padding: "22px 24px",
-      }}
-    >
-      {title ? (
-        <div
-          style={{
-            fontSize: 17,
-            fontWeight: 700,
-            letterSpacing: "-0.01em",
-            color: accent ? ACCENT : "#FFFFFF",
-            marginBottom: 8,
-          }}
-        >
-          {title}
-        </div>
-      ) : null}
-      <div style={{ fontSize: 14, lineHeight: 1.55, color: MUTED }}>{children}</div>
-    </div>
-  )
-}
-
-function Check() {
-  return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: 20,
-        height: 20,
-        borderRadius: "50%",
-        background: "rgba(0, 223, 216, 0.16)",
-        color: ACCENT,
-        fontSize: 12,
-        flexShrink: 0,
-      }}
-    >
-      ✓
-    </span>
-  )
-}
-
-function Bullet({ children }: { children: ReactNode }) {
-  return (
-    <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-      <Check />
-      <span style={{ fontSize: 14.5, lineHeight: 1.5, color: "#FFFFFF" }}>
-        {children}
-      </span>
-    </div>
-  )
-}
-
-function SponsorPage({
-  children,
-}: {
-  children: ReactNode
-}) {
-  return (
-    <div
-      className="@container"
-      style={{
-        position: "relative",
-        width: PAGE_W,
-        height: PAGE_H,
-        background: "#06040C",
-        color: "#FFFFFF",
-        fontFamily: "var(--font-brand)",
-        overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
-        boxShadow: "0 0 0 1px rgba(255,255,255,0.08)",
-      }}
-    >
-      {/* Kit gradient band — top 12% */}
-      <div
-        style={{
-          height: "12%",
-          flexShrink: 0,
-          background: BRAND_GRADIENT,
-        }}
-      />
-
-      {/* Header — logos left, re:Invent right */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "22px 56px",
-          flexShrink: 0,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-          <AwsLogo size={46} />
-          <AwsSbgLogo size={34} />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 4,
-          }}
-        >
-          <AwsReinventLogo size="sm" />
-          <span
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: 10,
-              fontWeight: 700,
-              letterSpacing: "0.03em",
-              color: "rgba(255, 255, 255, 0.85)",
-              textTransform: "uppercase",
-              whiteSpace: "nowrap",
-              lineHeight: 1,
-            }}
-          >
-            Watch &amp; Build Party 2026
-          </span>
-        </div>
-      </div>
-
-      {/* Body */}
-      <div style={{ flex: 1, padding: "20px 56px 8px", overflow: "hidden" }}>
-        {children}
-      </div>
-
-      {/* Skyline footer */}
-      <div style={{ position: "relative", height: 138, flexShrink: 0 }}>
-        <IslamabadHorizon opacity={1} height={138} objectFit="cover" />
-      </div>
-    </div>
-  )
-}
+import {
+  DeckPage,
+  Title,
+  Lead,
+  P,
+  AccentRule,
+  Card,
+  PAGE_W,
+  MUTED,
+  DIM,
+} from "../deck/DeckChrome"
 
 function CoverPage() {
   return (
-    <SponsorPage>
+    <DeckPage>
       <div
         style={{
           height: "100%",
@@ -300,13 +102,13 @@ function CoverPage() {
           </div>
         </div>
       </div>
-    </SponsorPage>
+    </DeckPage>
   )
 }
 
 function AboutEventPage() {
   return (
-    <SponsorPage>
+    <DeckPage>
       <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
         <AccentRule />
         <Title>About the Event</Title>
@@ -327,13 +129,13 @@ function AboutEventPage() {
           community.
         </P>
       </div>
-    </SponsorPage>
+    </DeckPage>
   )
 }
 
 function AboutOrganizerPage() {
   return (
-    <SponsorPage>
+    <DeckPage>
       <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
         <AccentRule />
         <Title>About the Organizer</Title>
@@ -348,7 +150,7 @@ function AboutOrganizerPage() {
           community leaders.
         </P>
       </div>
-    </SponsorPage>
+    </DeckPage>
   )
 }
 
@@ -360,7 +162,7 @@ function HighlightsPage() {
     { k: "Activities & networking", v: "Structured networking and interactive activities" },
   ]
   return (
-    <SponsorPage>
+    <DeckPage>
       <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
         <AccentRule />
         <Title>Event Highlights</Title>
@@ -375,7 +177,7 @@ function HighlightsPage() {
           ))}
         </div>
       </div>
-    </SponsorPage>
+    </DeckPage>
   )
 }
 
@@ -388,7 +190,7 @@ function WhyCollaboratePage() {
     { t: "Social & On-stage Promotion", d: "Visibility across all social channels and during the event day." },
   ]
   return (
-    <SponsorPage>
+    <DeckPage>
       <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
         <AccentRule />
         <Title>Why Collaborate</Title>
@@ -400,7 +202,7 @@ function WhyCollaboratePage() {
           ))}
         </div>
       </div>
-    </SponsorPage>
+    </DeckPage>
   )
 }
 
@@ -411,7 +213,7 @@ function WaysPage() {
     { n: "03", t: "Technical Session", d: "Bring experts from your organization to present." },
   ]
   return (
-    <SponsorPage>
+    <DeckPage>
       <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
         <AccentRule />
         <Title>Ways to Become Industry Partner</Title>
@@ -440,7 +242,7 @@ function WaysPage() {
           ))}
         </div>
       </div>
-    </SponsorPage>
+    </DeckPage>
   )
 }
 
@@ -452,7 +254,7 @@ function IncludedPage() {
     { t: "Event Access", d: "Reserved entry to all sessions, activities, and the networking floor." },
   ]
   return (
-    <SponsorPage>
+    <DeckPage>
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <AccentRule />
         <Title>Event Day Perks for All Industry Partners</Title>
@@ -468,7 +270,7 @@ function IncludedPage() {
           ))}
         </div>
       </div>
-    </SponsorPage>
+    </DeckPage>
   )
 }
 
@@ -512,7 +314,7 @@ function PackagesPage() {
     },
   ]
   return (
-    <SponsorPage>
+    <DeckPage>
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <AccentRule />
         <Title>Sponsor Packages</Title>
@@ -535,13 +337,13 @@ function PackagesPage() {
           ))}
         </div>
       </div>
-    </SponsorPage>
+    </DeckPage>
   )
 }
 
 function InKindTechPage() {
   return (
-    <SponsorPage>
+    <DeckPage>
       <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
         <AccentRule />
         <Title>In-kind &amp; Technical Session</Title>
@@ -583,7 +385,7 @@ function InKindTechPage() {
           </div>
         </div>
       </div>
-    </SponsorPage>
+    </DeckPage>
   )
 }
 
