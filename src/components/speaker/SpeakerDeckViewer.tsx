@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from "react"
-import { SPEAKER_DECK_SLIDES, type SpeakerDeckSlide } from "./SpeakerDeck"
+import { useState, useEffect, useRef } from "react"
+import { SPEAKER_DECK_SLIDES } from "./SpeakerDeck"
 import { PAGE_W, PAGE_H } from "../deck/DeckChrome"
 import { ACCENT } from "../../data/brand"
 import AwsLogo from "../AwsLogo"
@@ -7,7 +7,7 @@ import AwsSbgLogo from "../AwsSbgLogo"
 
 export default function SpeakerDeckViewer() {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
-  const [viewMode, setViewMode] = useState<"slides" | "scroll">("slides")
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [windowSize, setWindowSize] = useState({
     width: typeof window !== "undefined" ? window.innerWidth : 1200,
@@ -17,7 +17,7 @@ export default function SpeakerDeckViewer() {
   const touchStartX = useRef<number | null>(null)
   const touchStartY = useRef<number | null>(null)
 
-  // Track window resize for responsive scale calculation
+  // Track viewport dimensions accurately across mobile orientation / address bar changes
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -29,7 +29,7 @@ export default function SpeakerDeckViewer() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  // Fullscreen change listener
+  // Fullscreen state listener
   useEffect(() => {
     const handleFsChange = () => {
       setIsFullscreen(!!document.fullscreenElement)
@@ -38,52 +38,51 @@ export default function SpeakerDeckViewer() {
     return () => document.removeEventListener("fullscreenchange", handleFsChange)
   }, [])
 
-  // Anti-download / anti-print shortcuts blocker
+  // Keyboard navigation & anti-print / anti-save guards
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Block Ctrl+P / Cmd+P (Print) and Ctrl+S / Cmd+S (Save)
+      // Strictly prevent Ctrl+P / Cmd+P (Print) and Ctrl+S / Cmd+S (Save)
       if ((e.ctrlKey || e.metaKey) && (e.key === "p" || e.key === "s" || e.key === "P" || e.key === "S")) {
         e.preventDefault()
         e.stopPropagation()
         return false
       }
 
-      // Slide navigation shortcuts (in slides view mode)
-      if (viewMode === "slides") {
-        if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " " || e.key === "PageDown") {
-          e.preventDefault()
-          setCurrentSlideIndex((prev) => Math.min(SPEAKER_DECK_SLIDES.length - 1, prev + 1))
-        } else if (e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp") {
-          e.preventDefault()
-          setCurrentSlideIndex((prev) => Math.max(0, prev - 1))
-        } else if (e.key === "Home") {
-          e.preventDefault()
-          setCurrentSlideIndex(0)
-        } else if (e.key === "End") {
-          e.preventDefault()
-          setCurrentSlideIndex(SPEAKER_DECK_SLIDES.length - 1)
-        }
+      // Slide navigation shortcuts
+      if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " " || e.key === "PageDown") {
+        e.preventDefault()
+        setCurrentSlideIndex((prev) => Math.min(SPEAKER_DECK_SLIDES.length - 1, prev + 1))
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp") {
+        e.preventDefault()
+        setCurrentSlideIndex((prev) => Math.max(0, prev - 1))
+      } else if (e.key === "Home") {
+        e.preventDefault()
+        setCurrentSlideIndex(0)
+      } else if (e.key === "End") {
+        e.preventDefault()
+        setCurrentSlideIndex(SPEAKER_DECK_SLIDES.length - 1)
+      } else if (e.key === "Escape") {
+        setIsDrawerOpen(false)
       }
     }
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [viewMode])
+  }, [])
 
   // Mobile swipe gestures
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (viewMode !== "slides") return
     touchStartX.current = e.touches[0].clientX
     touchStartY.current = e.touches[0].clientY
   }
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (viewMode !== "slides" || touchStartX.current === null || touchStartY.current === null) return
+    if (touchStartX.current === null || touchStartY.current === null) return
     const diffX = e.changedTouches[0].clientX - touchStartX.current
     const diffY = e.changedTouches[0].clientY - touchStartY.current
 
-    // Detect horizontal swipe if delta X is greater than delta Y and exceeds 45px
-    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 45) {
+    // Trigger page flip if horizontal swipe exceeds 40px and is primarily horizontal
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
       if (diffX < 0) {
         // Swiped left -> next
         setCurrentSlideIndex((prev) => Math.min(SPEAKER_DECK_SLIDES.length - 1, prev + 1))
@@ -96,6 +95,9 @@ export default function SpeakerDeckViewer() {
     touchStartY.current = null
   }
 
+  const goToPrev = () => setCurrentSlideIndex((prev) => Math.max(0, prev - 1))
+  const goToNext = () => setCurrentSlideIndex((prev) => Math.min(SPEAKER_DECK_SLIDES.length - 1, prev + 1))
+
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().catch(() => {})
@@ -104,31 +106,34 @@ export default function SpeakerDeckViewer() {
     }
   }
 
+  const isMobile = windowSize.width < 768
   const currentSlide = SPEAKER_DECK_SLIDES[currentSlideIndex]
 
   // Dynamic responsive scale calculation
-  // In slides mode: scale to fit both width and height within viewport (accounting for header and footer)
-  const headerHeight = 60
-  const footerHeight = 64
-  const paddingX = windowSize.width < 640 ? 16 : 32
-  const paddingY = windowSize.width < 640 ? 12 : 24
+  // Computes scale factor to fit slide completely inside visible viewport without horizontal or vertical clipping
+  const headerHeight = isMobile ? 50 : 58
+  const footerHeight = isMobile ? 66 : 70
+  const horizontalPadding = isMobile ? 16 : 48
+  const verticalPadding = isMobile ? 12 : 24
 
-  const availableWidth = Math.max(280, windowSize.width - paddingX * 2)
-  const availableHeight = Math.max(320, windowSize.height - headerHeight - (viewMode === "slides" ? footerHeight : 0) - paddingY * 2)
+  const availableWidth = Math.max(260, windowSize.width - horizontalPadding * 2)
+  const availableHeight = Math.max(300, windowSize.height - headerHeight - footerHeight - verticalPadding * 2)
 
   const slideScale = Math.min(
     1,
     availableWidth / PAGE_W,
-    viewMode === "slides" ? availableHeight / PAGE_H : 1
+    availableHeight / PAGE_H
   )
 
-  const scrollScale = Math.min(1, availableWidth / PAGE_W)
+  const slideWidth = Math.round(PAGE_W * slideScale)
+  const slideHeight = Math.round(PAGE_H * slideScale)
 
   return (
     <div
       onContextMenu={(e) => e.preventDefault()}
       style={{
-        minHeight: "100vh",
+        minHeight: "100dvh",
+        height: "100dvh",
         background: "#06040C",
         color: "#FFFFFF",
         fontFamily: "var(--font-brand, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif)",
@@ -137,7 +142,7 @@ export default function SpeakerDeckViewer() {
         userSelect: "none",
         WebkitUserSelect: "none",
         position: "relative",
-        overflowX: "hidden",
+        overflow: "hidden",
       }}
     >
       {/* Strict anti-print CSS */}
@@ -148,181 +153,114 @@ export default function SpeakerDeckViewer() {
             visibility: hidden !important;
           }
         }
-        ::selection {
-          background: rgba(0, 223, 216, 0.25);
-          color: #ffffff;
+        @keyframes pulseGlow {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(0, 223, 216, 0.4); }
+          50% { box-shadow: 0 0 0 8px rgba(0, 223, 216, 0); }
         }
       `}</style>
 
-      {/* Top Floating / Sticky Navigation Bar */}
+      {/* Top Header Bar - Clean, Minimal & Never Cluttered on Mobile */}
       <header
         style={{
           height: headerHeight,
-          background: "rgba(6, 4, 12, 0.88)",
+          background: "rgba(6, 4, 12, 0.95)",
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
           borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-          position: "sticky",
-          top: 0,
-          zIndex: 50,
+          flexShrink: 0,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "0 clamp(12px, 3vw, 24px)",
-          gap: 12,
+          padding: isMobile ? "0 12px" : "0 24px",
+          zIndex: 40,
         }}
       >
-        {/* Left: Branding & Invite-Only Tag */}
-        <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-            <AwsLogo size={32} />
-            <AwsSbgLogo size={24} />
+        {/* Left: Branding */}
+        <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 8 : 12, minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+            <AwsLogo size={isMobile ? 26 : 30} />
+            <AwsSbgLogo size={isMobile ? 20 : 24} />
           </div>
+
           <div
             style={{
-              height: 20,
+              height: 16,
               width: 1,
               background: "rgba(255, 255, 255, 0.15)",
               flexShrink: 0,
             }}
           />
+
           <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
             <span
               style={{
-                fontSize: 13,
+                fontSize: isMobile ? 12 : 13.5,
                 fontWeight: 700,
-                letterSpacing: "-0.01em",
                 color: "#FFFFFF",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
+                lineHeight: 1.2,
               }}
             >
               Call for Speakers
             </span>
             <span
               style={{
-                fontSize: 10.5,
+                fontSize: isMobile ? 9.5 : 10.5,
                 color: "rgba(255, 255, 255, 0.55)",
-                letterSpacing: "0.02em",
                 whiteSpace: "nowrap",
+                lineHeight: 1.2,
               }}
             >
-              AWS re:Invent 2026 · Islamabad
+              AWS re:Invent 2026
             </span>
           </div>
-
-          <span
-            style={{
-              display: windowSize.width < 680 ? "none" : "inline-flex",
-              alignItems: "center",
-              padding: "2px 8px",
-              borderRadius: 9999,
-              background: "rgba(0, 223, 216, 0.08)",
-              border: "1px solid rgba(0, 223, 216, 0.3)",
-              color: ACCENT,
-              fontSize: 10,
-              fontWeight: 700,
-              letterSpacing: "0.06em",
-              textTransform: "uppercase",
-              flexShrink: 0,
-            }}
-          >
-            Invite Only
-          </span>
         </div>
 
-        {/* Center: Slide Jump Selector (Slide Mode) */}
-        {viewMode === "slides" && (
-          <div
-            style={{
-              display: windowSize.width < 860 ? "none" : "flex",
-              alignItems: "center",
-              gap: 8,
-            }}
-          >
-            <select
-              value={currentSlideIndex}
-              onChange={(e) => setCurrentSlideIndex(Number(e.target.value))}
-              style={{
-                background: "rgba(255, 255, 255, 0.06)",
-                border: "1px solid rgba(255, 255, 255, 0.14)",
-                borderRadius: 8,
-                color: "#FFFFFF",
-                padding: "6px 12px",
-                fontSize: 12.5,
-                fontFamily: "inherit",
-                cursor: "pointer",
-                outline: "none",
-              }}
-            >
-              {SPEAKER_DECK_SLIDES.map((s, idx) => (
-                <option key={s.id} value={idx} style={{ background: "#110D1B", color: "#FFFFFF" }}>
-                  {s.number} · {s.title}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-
-        {/* Right: View Mode Toggle & Fullscreen */}
+        {/* Right: Slide Counter Pill & Outline Drawer Trigger */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-          {/* View Mode Segmented Switch */}
-          <div
+          {/* Slide Indicator Button / Drawer Opener */}
+          <button
+            onClick={() => setIsDrawerOpen(true)}
+            title="Open slides outline"
             style={{
-              display: "flex",
+              display: "inline-flex",
               alignItems: "center",
+              gap: 6,
               background: "rgba(255, 255, 255, 0.06)",
+              border: "1px solid rgba(255, 255, 255, 0.14)",
               borderRadius: 8,
-              padding: 2,
-              border: "1px solid rgba(255, 255, 255, 0.1)",
+              padding: isMobile ? "5px 9px" : "6px 12px",
+              color: "#FFFFFF",
+              fontSize: isMobile ? 11 : 12.5,
+              fontWeight: 600,
+              cursor: "pointer",
             }}
           >
-            <button
-              onClick={() => setViewMode("slides")}
-              title="Presentation Mode (One slide at a time)"
+            <span
               style={{
-                border: "none",
-                background: viewMode === "slides" ? "rgba(255, 255, 255, 0.16)" : "transparent",
-                color: viewMode === "slides" ? "#FFFFFF" : "rgba(255, 255, 255, 0.6)",
-                fontSize: 11.5,
-                fontWeight: 600,
-                padding: "5px 10px",
-                borderRadius: 6,
-                cursor: "pointer",
-                transition: "all 0.15s ease",
+                fontFamily: "var(--font-mono, monospace)",
+                color: ACCENT,
+                fontWeight: 700,
               }}
             >
-              Slide View
-            </button>
-            <button
-              onClick={() => setViewMode("scroll")}
-              title="Continuous Scroll Mode (All slides stacked)"
-              style={{
-                border: "none",
-                background: viewMode === "scroll" ? "rgba(255, 255, 255, 0.16)" : "transparent",
-                color: viewMode === "scroll" ? "#FFFFFF" : "rgba(255, 255, 255, 0.6)",
-                fontSize: 11.5,
-                fontWeight: 600,
-                padding: "5px 10px",
-                borderRadius: 6,
-                cursor: "pointer",
-                transition: "all 0.15s ease",
-              }}
-            >
-              All Pages
-            </button>
-          </div>
+              {currentSlide.number} / {String(SPEAKER_DECK_SLIDES.length).padStart(2, "0")}
+            </span>
+            <span style={{ fontSize: 11, color: "rgba(255, 255, 255, 0.6)" }}>
+              {isMobile ? "☰" : "Slides ▾"}
+            </span>
+          </button>
 
           {/* Fullscreen Button */}
           <button
             onClick={toggleFullscreen}
             title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
             style={{
-              width: 32,
-              height: 32,
+              width: isMobile ? 32 : 36,
+              height: isMobile ? 32 : 36,
               borderRadius: 8,
-              border: "1px solid rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(255, 255, 255, 0.12)",
               background: "rgba(255, 255, 255, 0.04)",
               color: "#FFFFFF",
               cursor: "pointer",
@@ -337,197 +275,379 @@ export default function SpeakerDeckViewer() {
         </div>
       </header>
 
-      {/* Main Presentation Stage */}
+      {/* Main Presentation Canvas */}
       <main
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         style={{
           flex: 1,
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
-          justifyContent: viewMode === "slides" ? "center" : "flex-start",
-          padding: `${paddingY}px ${paddingX}px`,
+          justifyContent: "center",
           position: "relative",
+          overflow: "hidden",
+          padding: `${verticalPadding}px ${horizontalPadding}px`,
         }}
       >
-        {viewMode === "slides" ? (
-          /* Single Slide Presentation Mode */
+        {/* Slide Stage Wrapper */}
+        <div
+          style={{
+            position: "relative",
+            width: slideWidth,
+            height: slideHeight,
+            flexShrink: 0,
+            borderRadius: Math.max(6, Math.round(14 * slideScale)),
+            overflow: "hidden",
+            boxShadow: "0 20px 60px -10px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.1)",
+            background: "#06040C",
+          }}
+        >
+          {/* Scaled A4 Content */}
           <div
             style={{
-              width: Math.round(PAGE_W * slideScale),
-              height: Math.round(PAGE_H * slideScale),
-              overflow: "hidden",
-              position: "relative",
-              borderRadius: Math.round(12 * slideScale),
-              boxShadow: "0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1)",
-              background: "#06040C",
-              transition: "transform 0.15s ease, width 0.15s ease, height 0.15s ease",
+              width: PAGE_W,
+              height: PAGE_H,
+              transform: `scale(${slideScale})`,
+              transformOrigin: "top left",
+              pointerEvents: "auto",
             }}
           >
-            <div
-              style={{
-                width: PAGE_W,
-                height: PAGE_H,
-                transform: `scale(${slideScale})`,
-                transformOrigin: "top left",
-                pointerEvents: "auto",
-              }}
-            >
-              <currentSlide.component />
-            </div>
+            <currentSlide.component />
           </div>
-        ) : (
-          /* Continuous Scroll Mode (All 9 Slides Vertically) */
+
+          {/* Invisible Left / Right Tap Zones on Slide */}
           <div
+            onClick={goToPrev}
+            title="Previous Slide"
             style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "35%",
+              height: "100%",
+              cursor: currentSlideIndex > 0 ? "pointer" : "default",
+              zIndex: 10,
+            }}
+          />
+          <div
+            onClick={goToNext}
+            title="Next Slide"
+            style={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              width: "45%",
+              height: "100%",
+              cursor: currentSlideIndex < SPEAKER_DECK_SLIDES.length - 1 ? "pointer" : "default",
+              zIndex: 10,
+            }}
+          />
+        </div>
+
+        {/* PROMINENT FLOATING SIDE CHEVRONS (SIGNALS TO CHANGE PAGE) */}
+        {/* Left Side Arrow Button */}
+        {currentSlideIndex > 0 && (
+          <button
+            onClick={goToPrev}
+            aria-label="Previous Slide"
+            style={{
+              position: "absolute",
+              left: isMobile ? 8 : Math.max(12, (windowSize.width - slideWidth) / 2 - 56),
+              top: "50%",
+              transform: "translateY(-50%)",
+              zIndex: 30,
+              width: isMobile ? 40 : 46,
+              height: isMobile ? 40 : 46,
+              borderRadius: "50%",
+              background: "rgba(6, 4, 12, 0.88)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              border: "1.5px solid rgba(255, 255, 255, 0.25)",
+              color: "#FFFFFF",
+              cursor: "pointer",
               display: "flex",
-              flexDirection: "column",
-              gap: 28,
-              width: Math.round(PAGE_W * scrollScale),
-              maxWidth: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.6)",
+              transition: "transform 0.15s ease, background 0.15s ease",
             }}
           >
-            {SPEAKER_DECK_SLIDES.map((slide, idx) => (
-              <div
-                key={slide.id}
-                style={{
-                  width: Math.round(PAGE_W * scrollScale),
-                  height: Math.round(PAGE_H * scrollScale),
-                  overflow: "hidden",
-                  position: "relative",
-                  borderRadius: Math.round(12 * scrollScale),
-                  boxShadow: "0 18px 45px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08)",
-                  background: "#06040C",
-                }}
-              >
-                <div
-                  style={{
-                    width: PAGE_W,
-                    height: PAGE_H,
-                    transform: `scale(${scrollScale})`,
-                    transformOrigin: "top left",
-                    pointerEvents: "auto",
-                  }}
-                >
-                  <slide.component />
-                </div>
-              </div>
-            ))}
-          </div>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+        )}
+
+        {/* Right Side Arrow Button (Highlighted in Accent with Attention Pulse) */}
+        {currentSlideIndex < SPEAKER_DECK_SLIDES.length - 1 && (
+          <button
+            onClick={goToNext}
+            aria-label="Next Slide"
+            style={{
+              position: "absolute",
+              right: isMobile ? 8 : Math.max(12, (windowSize.width - slideWidth) / 2 - 56),
+              top: "50%",
+              transform: "translateY(-50%)",
+              zIndex: 30,
+              width: isMobile ? 40 : 46,
+              height: isMobile ? 40 : 46,
+              borderRadius: "50%",
+              background: isMobile ? ACCENT : "rgba(6, 4, 12, 0.88)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
+              border: isMobile ? "none" : `2px solid ${ACCENT}`,
+              color: isMobile ? "#06040C" : ACCENT,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: isMobile
+                ? "0 4px 24px rgba(0, 223, 216, 0.5)"
+                : "0 4px 20px rgba(0, 0, 0, 0.6)",
+              animation: currentSlideIndex === 0 ? "pulseGlow 2s infinite" : "none",
+              transition: "transform 0.15s ease, background 0.15s ease",
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
         )}
       </main>
 
-      {/* Bottom Controller Bar (Active in Slide View Mode) */}
-      {viewMode === "slides" && (
-        <footer
+      {/* Bottom Floating Navigation Dock (Always Pinned, 100% Visible) */}
+      <footer
+        style={{
+          height: footerHeight,
+          background: "rgba(6, 4, 12, 0.95)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+          flexShrink: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: isMobile
+            ? "0 12px env(safe-area-inset-bottom, 0px)"
+            : "0 24px",
+          zIndex: 40,
+        }}
+      >
+        {/* Previous Button */}
+        <button
+          onClick={goToPrev}
+          disabled={currentSlideIndex === 0}
           style={{
-            height: footerHeight,
-            background: "rgba(6, 4, 12, 0.9)",
-            backdropFilter: "blur(16px)",
-            WebkitBackdropFilter: "blur(16px)",
-            borderTop: "1px solid rgba(255, 255, 255, 0.08)",
-            position: "sticky",
-            bottom: 0,
-            zIndex: 40,
-            display: "flex",
+            display: "inline-flex",
             alignItems: "center",
-            justifyContent: "space-between",
-            padding: "0 clamp(16px, 4vw, 32px)",
+            gap: 6,
+            minHeight: 44,
+            padding: isMobile ? "0 12px" : "0 18px",
+            borderRadius: 10,
+            border: "1.5px solid rgba(255, 255, 255, 0.15)",
+            background: currentSlideIndex === 0 ? "rgba(255, 255, 255, 0.03)" : "rgba(255, 255, 255, 0.08)",
+            color: currentSlideIndex === 0 ? "rgba(255, 255, 255, 0.25)" : "#FFFFFF",
+            fontSize: isMobile ? 12.5 : 13.5,
+            fontWeight: 600,
+            cursor: currentSlideIndex === 0 ? "not-allowed" : "pointer",
+            transition: "all 0.15s ease",
           }}
         >
-          {/* Previous Button */}
-          <button
-            onClick={() => setCurrentSlideIndex((prev) => Math.max(0, prev - 1))}
-            disabled={currentSlideIndex === 0}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              padding: "8px 16px",
-              borderRadius: 8,
-              border: "1px solid rgba(255, 255, 255, 0.14)",
-              background: currentSlideIndex === 0 ? "rgba(255, 255, 255, 0.03)" : "rgba(255, 255, 255, 0.08)",
-              color: currentSlideIndex === 0 ? "rgba(255, 255, 255, 0.3)" : "#FFFFFF",
-              fontSize: 13,
-              fontWeight: 600,
-              cursor: currentSlideIndex === 0 ? "not-allowed" : "pointer",
-              transition: "all 0.15s ease",
-            }}
-          >
-            ← <span style={{ display: windowSize.width < 480 ? "none" : "inline" }}>Previous</span>
-          </button>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+          <span>Prev</span>
+        </button>
 
-          {/* Center Indicator */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span
-                style={{
-                  fontFamily: "var(--font-mono, monospace)",
-                  fontSize: 13,
-                  fontWeight: 700,
-                  color: ACCENT,
-                  letterSpacing: "0.04em",
-                }}
-              >
-                {currentSlide.number} / {String(SPEAKER_DECK_SLIDES.length).padStart(2, "0")}
-              </span>
-              <span
-                style={{
-                  fontSize: 12.5,
-                  color: "rgba(255, 255, 255, 0.75)",
-                  fontWeight: 500,
-                  display: windowSize.width < 540 ? "none" : "inline",
-                }}
-              >
-                · {currentSlide.title}
-              </span>
-            </div>
-
-            {/* Micro dots */}
-            <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-              {SPEAKER_DECK_SLIDES.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentSlideIndex(idx)}
-                  title={`Jump to slide ${idx + 1}`}
-                  style={{
-                    width: currentSlideIndex === idx ? 16 : 6,
-                    height: 5,
-                    borderRadius: 3,
-                    background: currentSlideIndex === idx ? ACCENT : "rgba(255, 255, 255, 0.2)",
-                    border: "none",
-                    padding: 0,
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                  }}
-                />
-              ))}
-            </div>
+        {/* Center Progress & Slide Title Indicator */}
+        <div
+          onClick={() => setIsDrawerOpen(true)}
+          title="Click to view all slides"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 4,
+            cursor: "pointer",
+            padding: "4px 8px",
+            borderRadius: 8,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span
+              style={{
+                fontFamily: "var(--font-mono, monospace)",
+                fontSize: isMobile ? 13 : 14,
+                fontWeight: 700,
+                color: ACCENT,
+                letterSpacing: "0.04em",
+              }}
+            >
+              {currentSlide.number} / {String(SPEAKER_DECK_SLIDES.length).padStart(2, "0")}
+            </span>
+            <span
+              style={{
+                fontSize: isMobile ? 11.5 : 13,
+                color: "rgba(255, 255, 255, 0.75)",
+                fontWeight: 500,
+                maxWidth: isMobile ? 140 : 260,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              · {currentSlide.title}
+            </span>
           </div>
 
-          {/* Next Button */}
-          <button
-            onClick={() => setCurrentSlideIndex((prev) => Math.min(SPEAKER_DECK_SLIDES.length - 1, prev + 1))}
-            disabled={currentSlideIndex === SPEAKER_DECK_SLIDES.length - 1}
+          {/* Visual Progress Stepper Dots */}
+          <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 4 : 5 }}>
+            {SPEAKER_DECK_SLIDES.map((_, idx) => (
+              <div
+                key={idx}
+                style={{
+                  width: currentSlideIndex === idx ? (isMobile ? 14 : 18) : 5,
+                  height: 4,
+                  borderRadius: 2,
+                  background: currentSlideIndex === idx ? ACCENT : "rgba(255, 255, 255, 0.2)",
+                  transition: "all 0.2s ease",
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Next Button (High-Contrast Cyan CTA) */}
+        <button
+          onClick={goToNext}
+          disabled={currentSlideIndex === SPEAKER_DECK_SLIDES.length - 1}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            minHeight: 44,
+            padding: isMobile ? "0 14px" : "0 20px",
+            borderRadius: 10,
+            border: "none",
+            background: currentSlideIndex === SPEAKER_DECK_SLIDES.length - 1 ? "rgba(255, 255, 255, 0.05)" : ACCENT,
+            color: currentSlideIndex === SPEAKER_DECK_SLIDES.length - 1 ? "rgba(255, 255, 255, 0.3)" : "#06040C",
+            fontSize: isMobile ? 12.5 : 13.5,
+            fontWeight: 700,
+            cursor: currentSlideIndex === SPEAKER_DECK_SLIDES.length - 1 ? "not-allowed" : "pointer",
+            boxShadow: currentSlideIndex < SPEAKER_DECK_SLIDES.length - 1 ? "0 2px 14px rgba(0, 223, 216, 0.35)" : "none",
+            transition: "all 0.15s ease",
+          }}
+        >
+          <span>Next</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+      </footer>
+
+      {/* Slide Drawer Modal (Quick Navigation Across All 9 Pages) */}
+      {isDrawerOpen && (
+        <div
+          onClick={() => setIsDrawerOpen(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.75)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            zIndex: 100,
+            display: "flex",
+            justifyContent: "flex-end",
+            animation: "fadeIn 0.2s ease",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              padding: "8px 16px",
-              borderRadius: 8,
-              border: "1px solid rgba(255, 255, 255, 0.14)",
-              background: currentSlideIndex === SPEAKER_DECK_SLIDES.length - 1 ? "rgba(255, 255, 255, 0.03)" : ACCENT,
-              color: currentSlideIndex === SPEAKER_DECK_SLIDES.length - 1 ? "rgba(255, 255, 255, 0.3)" : "#06040C",
-              fontSize: 13,
-              fontWeight: 700,
-              cursor: currentSlideIndex === SPEAKER_DECK_SLIDES.length - 1 ? "not-allowed" : "pointer",
-              transition: "all 0.15s ease",
+              width: "min(360px, 85vw)",
+              height: "100%",
+              background: "#0D0917",
+              borderLeft: "1px solid rgba(255, 255, 255, 0.12)",
+              display: "flex",
+              flexDirection: "column",
+              padding: "20px",
+              boxShadow: "-10px 0 40px rgba(0, 0, 0, 0.8)",
             }}
           >
-            <span style={{ display: windowSize.width < 480 ? "none" : "inline" }}>Next</span> →
-          </button>
-        </footer>
+            {/* Drawer Header */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, borderBottom: "1px solid rgba(255, 255, 255, 0.08)", paddingBottom: 14 }}>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "#FFFFFF" }}>Slide Navigation</span>
+                <span style={{ fontSize: 11, color: "rgba(255, 255, 255, 0.5)" }}>Select any slide to jump</span>
+              </div>
+              <button
+                onClick={() => setIsDrawerOpen(false)}
+                style={{
+                  background: "rgba(255, 255, 255, 0.08)",
+                  border: "none",
+                  borderRadius: 6,
+                  color: "#FFFFFF",
+                  width: 32,
+                  height: 32,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 16,
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Slide Items List */}
+            <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 8 }}>
+              {SPEAKER_DECK_SLIDES.map((slide, idx) => {
+                const isActive = currentSlideIndex === idx
+                return (
+                  <button
+                    key={slide.id}
+                    onClick={() => {
+                      setCurrentSlideIndex(idx)
+                      setIsDrawerOpen(false)
+                    }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 12,
+                      padding: "12px 14px",
+                      borderRadius: 10,
+                      border: isActive ? `1.5px solid ${ACCENT}` : "1px solid rgba(255, 255, 255, 0.06)",
+                      background: isActive ? "rgba(0, 223, 216, 0.08)" : "rgba(255, 255, 255, 0.02)",
+                      color: isActive ? "#FFFFFF" : "rgba(255, 255, 255, 0.75)",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      transition: "all 0.15s ease",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: "var(--font-mono, monospace)",
+                        fontSize: 12,
+                        fontWeight: 700,
+                        color: isActive ? ACCENT : "rgba(255, 255, 255, 0.4)",
+                        width: 24,
+                      }}
+                    >
+                      {slide.number}
+                    </span>
+                    <span style={{ fontSize: 13, fontWeight: isActive ? 600 : 400, flex: 1 }}>
+                      {slide.title}
+                    </span>
+                    {isActive && (
+                      <span style={{ width: 6, height: 6, borderRadius: "50%", background: ACCENT }} />
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )
