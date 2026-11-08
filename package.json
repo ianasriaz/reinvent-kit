@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "NODE_ENV=development vite",
     "build": "vite build",
+    "build:wp": "vite build --config vite.wp.config.ts",
+    "sync:theme": "npm run build:wp && node scripts/sync-to-theme.js",
     "preview": "vite preview",
     "format": "oxfmt"
   },

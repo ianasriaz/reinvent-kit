@@ -14,7 +14,7 @@ import {
 import { ACCENT } from "../../data/brand"
 import { prepareRenderer } from "../../utils/exportImage"
 
-function CoverPage() {
+export function CoverPage() {
   return (
     <DeckPage>
       <div
@@ -103,7 +103,7 @@ function CoverPage() {
   )
 }
 
-function AboutEventPage() {
+export function AboutEventPage() {
   return (
     <DeckPage>
       <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
@@ -128,7 +128,7 @@ function AboutEventPage() {
   )
 }
 
-function WhySpeakPage() {
+export function WhySpeakPage() {
   const items = [
     { t: "Share Expertise", d: "Present your AWS experience to a technical, engaged audience of builders and professionals." },
     { t: "Community Recognition", d: "Be recognized as an official event speaker across the chapter's website and social channels." },
@@ -153,7 +153,7 @@ function WhySpeakPage() {
   )
 }
 
-function WhoPage() {
+export function WhoPage() {
   return (
     <DeckPage>
       <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
@@ -179,7 +179,7 @@ function WhoPage() {
   )
 }
 
-function PerksPage() {
+export function PerksPage() {
   const perks = [
     { t: "Shield of Recognition", d: "An exclusive printed shield with your name." },
     { t: "AWS Swag Kit", d: "Official event swag." },
@@ -206,7 +206,7 @@ function PerksPage() {
   )
 }
 
-function SessionTypesPage() {
+export function SessionTypesPage() {
   const items = [
     {
       n: "01",
@@ -264,7 +264,7 @@ function SessionTypesPage() {
   )
 }
 
-function TopicsPage() {
+export function TopicsPage() {
   const groups = [
     { t: "AWS Core", d: "Serverless, DevOps, data, security, networking, scalability, and AWS cost optimization.", accent: true },
     { t: "AI & ML", d: "Generative AI with Amazon Bedrock, SageMaker, and LLM applications." },
@@ -289,7 +289,7 @@ function TopicsPage() {
   )
 }
 
-function ProcessPage() {
+export function ProcessPage() {
   const steps = [
     { n: "01", t: "Apply", d: "Send your session title, preferred format, and a short outline." },
     { n: "02", t: "Review", d: "The organizing team reviews submissions for fit and AWS depth." },
@@ -333,7 +333,7 @@ function ProcessPage() {
   )
 }
 
-function ApplyPage() {
+export function ApplyPage() {
   return (
     <DeckPage>
       <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
@@ -359,13 +359,46 @@ function ApplyPage() {
           </div>
           <div style={{ fontSize: 14, color: MUTED }}>AWS Student Builder Group Leader</div>
           <div style={{ marginTop: 8, fontSize: 15, color: "#FFFFFF", lineHeight: 1.7 }}>
-            anasriaz@awsairuniversity.com<br />+92 300 0790170
+            <a
+              href="mailto:anasriaz@awsairuniversity.com"
+              style={{ color: "#FFFFFF", textDecoration: "none" }}
+            >
+              anasriaz@awsairuniversity.com
+            </a>
+            <br />
+            <a
+              href="https://wa.me/923000790170"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "#FFFFFF", textDecoration: "none" }}
+            >
+              +92 300 0790170
+            </a>
           </div>
         </div>
       </div>
     </DeckPage>
   )
 }
+
+export interface SpeakerDeckSlide {
+  id: string
+  number: string
+  title: string
+  component: () => React.JSX.Element
+}
+
+export const SPEAKER_DECK_SLIDES: SpeakerDeckSlide[] = [
+  { id: "cover", number: "01", title: "Cover", component: CoverPage },
+  { id: "about", number: "02", title: "About the Event", component: AboutEventPage },
+  { id: "why-speak", number: "03", title: "Why Speak", component: WhySpeakPage },
+  { id: "who", number: "04", title: "Who We're Looking For", component: WhoPage },
+  { id: "perks", number: "05", title: "Speaker Perks", component: PerksPage },
+  { id: "session-types", number: "06", title: "Session Types", component: SessionTypesPage },
+  { id: "topics", number: "07", title: "Suggested Topics", component: TopicsPage },
+  { id: "process", number: "08", title: "Selection & Process", component: ProcessPage },
+  { id: "apply", number: "09", title: "Apply to Speak", component: ApplyPage },
+]
 
 export default function SpeakerDeck() {
   const pages = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)]
