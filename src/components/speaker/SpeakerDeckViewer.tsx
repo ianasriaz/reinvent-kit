@@ -153,10 +153,6 @@ export default function SpeakerDeckViewer() {
             visibility: hidden !important;
           }
         }
-        @keyframes pulseGlow {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(0, 223, 216, 0.4); }
-          50% { box-shadow: 0 0 0 8px rgba(0, 223, 216, 0); }
-        }
       `}</style>
 
       {/* Top Header Bar - Clean, Minimal & Never Cluttered on Mobile */}
@@ -343,76 +339,6 @@ export default function SpeakerDeckViewer() {
             }}
           />
         </div>
-
-        {/* PROMINENT FLOATING SIDE CHEVRONS (SIGNALS TO CHANGE PAGE) */}
-        {/* Left Side Arrow Button */}
-        {currentSlideIndex > 0 && (
-          <button
-            onClick={goToPrev}
-            aria-label="Previous Slide"
-            style={{
-              position: "absolute",
-              left: isMobile ? 8 : Math.max(12, (windowSize.width - slideWidth) / 2 - 56),
-              top: "50%",
-              transform: "translateY(-50%)",
-              zIndex: 30,
-              width: isMobile ? 40 : 46,
-              height: isMobile ? 40 : 46,
-              borderRadius: "50%",
-              background: "rgba(6, 4, 12, 0.88)",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
-              border: "1.5px solid rgba(255, 255, 255, 0.25)",
-              color: "#FFFFFF",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.6)",
-              transition: "transform 0.15s ease, background 0.15s ease",
-            }}
-          >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-          </button>
-        )}
-
-        {/* Right Side Arrow Button (Highlighted in Accent with Attention Pulse) */}
-        {currentSlideIndex < SPEAKER_DECK_SLIDES.length - 1 && (
-          <button
-            onClick={goToNext}
-            aria-label="Next Slide"
-            style={{
-              position: "absolute",
-              right: isMobile ? 8 : Math.max(12, (windowSize.width - slideWidth) / 2 - 56),
-              top: "50%",
-              transform: "translateY(-50%)",
-              zIndex: 30,
-              width: isMobile ? 40 : 46,
-              height: isMobile ? 40 : 46,
-              borderRadius: "50%",
-              background: isMobile ? ACCENT : "rgba(6, 4, 12, 0.88)",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
-              border: isMobile ? "none" : `2px solid ${ACCENT}`,
-              color: isMobile ? "#06040C" : ACCENT,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: isMobile
-                ? "0 4px 24px rgba(0, 223, 216, 0.5)"
-                : "0 4px 20px rgba(0, 0, 0, 0.6)",
-              animation: currentSlideIndex === 0 ? "pulseGlow 2s infinite" : "none",
-              transition: "transform 0.15s ease, background 0.15s ease",
-            }}
-          >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </button>
-        )}
       </main>
 
       {/* Bottom Floating Navigation Dock (Always Pinned, 100% Visible) */}

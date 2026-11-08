@@ -159,7 +159,6 @@ export function WhoPage() {
       <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
         <AccentRule />
         <Title>Who We&apos;re Looking For</Title>
-        <Lead>This is an expert stage, not an open call.</Lead>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
           <Card title="Experienced Professionals">
             Practitioners who work with AWS day to day and speak from real
